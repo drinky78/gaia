@@ -4,7 +4,16 @@
  */
 paginaPrivata();
 
-controllaParametri(['id'], 'admin.corsi.crea&err');
+controllaParametri(['id'], 'formazione.corsi.crea&err');
+
+$err = '';
+if (!empty($_GET['err']) && intval($_GET['err'])) {
+    if (!empty($conf['errori_corsi'][$_GET['err']])) {
+        $err = $conf['errori_corsi'][$_GET['err']];
+    } else {
+        $err = 'errore sconosciuto';
+    }
+}
 
 // try catch da usare per evitare stampa dell'errore e poter fare redirect 
 $id = intval($_GET['id']);
@@ -16,7 +25,7 @@ try {
     $tipoCorso = Certificato::by('id', intval($c->tipocorso));
 
 } catch(Exception $e) {
-    redirect('admin.corsi.crea&err');
+    redirect('formazione.corsi.crea&err');
 }
 
 /*
@@ -24,6 +33,10 @@ if (!$c->modificabile()) {
     redirect('formazione.corsi.riepilogo&id='.$id);
 }
 */
+
+if (!$c->finito() || $c->stato!=CORSO_S_CONCLUSO) {
+    redirect('formazione.corsi.riepilogo&id='.$id);
+}
 
 
 $discenti = PartecipazioneCorso::filtra([
@@ -54,6 +67,15 @@ $d = new DateTime('@' . $c->inizio);
 
     <div class="span8">
         <h2><i class="icon-plus-square icon-calendar muted"></i> Corso di formazione</h2>
+        
+        <?php if (!empty($err)) { ?>
+        <div class="alert alert-block alert-danger">
+            <div class="row-fluid">
+                <p><i class="icon-exclamation-triangle"></i><strong>Errore</strong>: <?php echo $err ?></p>
+            </div>
+        </div>
+        <?php } ?>
+        
         <form action="?p=formazione.corsi.risultati.ok" method="POST">
             <input type="hidden" name="id" value="<?php echo $id ?>" />
             <div class="alert alert-block alert-success">

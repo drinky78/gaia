@@ -959,13 +959,15 @@ $conf['risultato'] = [
 define('CORSO_ERRORE_CORSO_NON_TROVATO',          1);
 define('CORSO_ERRORE_DATA_NON_CORRETTA',          2);
 define('CORSO_ERRORE_CORSO_NON_MODIFICABILE',     3);
+define('CORSO_ERRORE_RISULTATI_NON_COERENTI',     4);
 define('CORSO_ERRORE_NON_ANCORA_CONCLUSO',      100);
 
 $conf['errori_corsi'] = [
     CORSO_ERRORE_CORSO_NON_TROVATO    =>  'Il corso ricercato non esiste',
     CORSO_ERRORE_DATA_NON_CORRETTA    =>  'La data e l\'ora inserite non sono corrette',
     CORSO_ERRORE_CORSO_NON_MODIFICABILE => 'Non hai i permessi per modificare questo corso',
-    CORSO_ERRORE_NON_ANCORA_CONCLUSO    =>  'Il corso non risulta ancora concluso'
+    CORSO_ERRORE_RISULTATI_NON_COERENTI => 'I risultati inseriti non sono corretti',
+    CORSO_ERRORE_NON_ANCORA_CONCLUSO    =>  'Il corso non risulta ancora terminato'
 ];  
 
 /*

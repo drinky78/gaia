@@ -15,11 +15,13 @@ try {
     }
     $tipoCorso = TipoCorso::by('id', intval($c->tipo));
 
+    $c->aggiornaStato();
+    
 } catch(Exception $e) {
     redirect('admin.corsi.crea&err');
 }
 
-if (!empty($_GET['err']) && is_int($_GET['err'])) {
+if (!empty($_GET['err']) && intval($_GET['err'])) {
     if (!empty($conf['errori_corsi'][$_GET['err']])) {
         $err = $conf['errori_corsi'][$_GET['err']];
     } else {
@@ -175,6 +177,7 @@ $geoComitato = GeoPolitica::daOid($c->organizzatore);
             </div>
         </div>
         <hr />
+
         <div class="span12">
             <div class="alert alert-block alert-error allinea-centro">
                 <h4 class="text-error ">
@@ -304,6 +307,7 @@ $geoComitato = GeoPolitica::daOid($c->organizzatore);
                     </ul>
                 </div>
 
+                <?php /*
                 <h4>
                     <i class="icon-file-text"></i>
                     Risorse
@@ -330,7 +334,8 @@ $geoComitato = GeoPolitica::daOid($c->organizzatore);
                         ?>
                     </ul>
                 </div>
-
+                */ ?>
+                
                 <?php
                 if ($me->admin || $conf['debug'] || $modificabile) {
                     ?>
@@ -345,10 +350,20 @@ $geoComitato = GeoPolitica::daOid($c->organizzatore);
                             $count = 0;
                             if (!empty($certificati)) {
                                 foreach ($certificati as $certificato) {
+                                    
+                                    if ($certificato->idoneita != CORSO_RISULTATO_IDONEO) continue;
+                                    
                                     ++$count;
-                                    ?>
-                                    <li><a href="<?php echo 'download.php?id='.$certificato->file ?>">Certificato di <?php echo $certificato->volontario()->nomeCompleto() ?></a></li>
-                                    <?php
+                                    
+                                    if ($certificato->file != null) {
+                                        ?>
+                                        <li><a href="<?php echo 'download.php?id='.$certificato->file ?>">Certificato di <?php echo $certificato->volontario()->nomeCompleto() ?></a></li>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <li>Certificato non generato correttamente per <?php echo $certificato->volontario()->nomeCompleto() ?></li>
+                                        <?php
+                                    }
                                 }
                             }
                             

@@ -4,7 +4,7 @@
  */
 paginaPresidenziale(null, null, APP_OBIETTIVO, OBIETTIVO_1);
 
-controllaParametri(['id','discIdoneita','discAffiancamenti'], 'admin.corsi.crea&err');
+controllaParametri(['id','discIdoneita','discAffiancamenti'], 'formazione.corsi.risultati&err');
 
 $idoneitaDisc = filter_input(INPUT_POST, 'discIdoneita', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $idoneitaAff = filter_input(INPUT_POST, 'affIdoneita', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -33,13 +33,13 @@ try {
         throw new Exception('Manomissione');
     }
     
-    if (!$c->concluso()) {
+    if (!$c->finito()) {
         redirect('formazione.corsi.riepilogo&id='.$c->id.'&err='.CORSO_ERRORE_NON_ANCORA_CONCLUSO);
     }
 
 } catch (Exception $e) {
     die($e->getMessage());
-    redirect('admin.corsi.crea&err');
+    redirect('formazione.corsi.crea&err');
 }
 
 $now = new DT();
@@ -49,6 +49,24 @@ foreach ($docenti as $i) {
     $idDocenti[] = $i->volontario;
 }
 unset($docenti);
+
+$err = 0;
+foreach ($idoneitaDisc as $volontario => $risultato) {
+    if ($risultato==CORSO_RISULTATO_NESSUNO ||
+        intval($volontario)<=0
+        )
+        $err++;
+}
+foreach ($idoneitaAff as $volontario => $risultato) {
+    if ($risultato==CORSO_RISULTATO_NESSUNO ||
+        intval($volontario)<=0
+        )
+        $err++;
+}
+if ($err) {
+    redirect('formazione.corsi.risultati&id='.$c->id.'&err='.CORSO_ERRORE_RISULTATI_NON_COERENTI);
+    die;
+}
 
 foreach ($idoneitaDisc as $volontario => $risultato) {
     $r = new RisultatoCorso();
@@ -71,7 +89,6 @@ foreach ($idoneitaDisc as $volontario => $risultato) {
     }
     $r->timestamp = $now->getTimestamp();
     $r->note = $r->note  . "";
-    
 }
 
 foreach ($idoneitaAff as $volontario => $risultato) {
@@ -95,7 +112,6 @@ foreach ($idoneitaAff as $volontario => $risultato) {
     }
     $r->timestamp = $now->getTimestamp();
     $r->note = $r->note  . "";
-    
 }
 
 /*
