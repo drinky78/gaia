@@ -26,6 +26,11 @@ class TitoloCorso extends Entita {
         //return self::ultimi(1);
     }
     
+    public function corso() {
+        if (empty($this->corso)) return null;
+        return Corso::id($this->corso);
+    }
+    
     public function titolo() {
         return TipoCorso::id($this->titolo);
     }

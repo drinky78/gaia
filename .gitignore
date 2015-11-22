@@ -55,3 +55,11 @@ inc/_test_cron_forza_termine_corso.php
 inc/_test_invioInviti.php
 inc/_test_query_ricerca.php
 mod_formazione_todo.txt
+/core/conf/captcha.php
+/core/conf/email.php
+/core/conf/generale.php
+/core/conf/database.php
+/core/conf/cache.php
+/core/conf/autopull.php
+/core/conf/mongodb.php
+/core/conf/sessioni.php
