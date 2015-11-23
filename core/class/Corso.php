@@ -683,7 +683,6 @@ class Corso extends GeoEntita {
      * @return PDF 
      */
     public function generaAttestato($risultato, $iscritto) {
-
         // leggo i settaggi per il corso specifico
         $settings = Utility::parse_ini(CORSI_INI, true);   
         
@@ -709,13 +708,15 @@ class Corso extends GeoEntita {
  
         // verifico il template da usare
         $logoCustom = "";
-        $templateAttestato = 'crs_attestato';
+        $templateAttestato = $settings["TIPOCORSO_".$this->tipo]["TEMPLATE_FILE"];
+        $orientamento = $settings["TIPOCORSO_".$this->tipo]["TEMPLATE_ORIENTAMENTO"];
+                
         if (!empty($settings["TIPOCORSO_".$this->tipo][$regione])){
-            $templateAttestato = 'crs_attestato_v2';
+            $templateAttestato = $templateAttestato.'_v2';
             $logoCustom = $settings["TIPOCORSO_".$this->tipo][$regione];
         }
         if (!empty($settings["TIPOCORSO_".$this->tipo][$provincia])){
-            $templateAttestato = 'crs_attestato_v2';
+            $templateAttestato = $templateAttestato.'_v2';
             $logoCustom = $settings["TIPOCORSO_".$this->tipo][$provincia];
         }
         if (is_object($logoCustom) || is_array($logoCustom)){
@@ -723,7 +724,7 @@ class Corso extends GeoEntita {
             $logoCustomHeight = $logoCustom["h"];
             $logoCustom = $logoCustom["url"];
         }
-        
+         
         $logoCustom = $regione."_".$provincia;
         $p = new PDF($templateAttestato, $nomefile);
         $p->_COMITATO     = maiuscolo($comitato);
@@ -732,6 +733,7 @@ class Corso extends GeoEntita {
         $p->_DIRETTORE    = $this->direttore()->nomeCompleto();
         $p->_PRESIDENTE   = $this->presidente()->nomeCompleto();
         $p->_SERIALE      = $risultato->seriale;
+        $p->_ANNO         = date('Y', time());
         $p->_CF           = $iscritto->codiceFiscale;
         $p->_VOLONTARIO   = $iscritto->nomeCompleto();
         $p->_DATAESAME    = date('d/m/Y', $this->inizio);
@@ -741,7 +743,9 @@ class Corso extends GeoEntita {
         $p->_LOGOCUSTOMWIDTH  = empty($logoCustomWidth) ? 300 : $logoCustomWidth;
         $p->_LOGOCUSTOMHEIGHT = empty($logoCustomHeight) ? 270 : $logoCustomHeight;
         $p->_LOGOCUSTOM   = $logoCustom;
-        $file = $p->salvaFile(null, true);
+         
+        $file = $p->salvaFile(null, true, $orientamento);
+       
         
         return $file;
     }
@@ -1240,6 +1244,7 @@ class Corso extends GeoEntita {
                 $titoloCorso->titolo = $this->tipo;
                 $titoloCorso->codice = $risultato->seriale; 
             }
+            
         }
         
         // Verbale, generazione e invio
