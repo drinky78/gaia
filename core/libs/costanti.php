@@ -17,7 +17,7 @@ define ('MODULO_FORMAZIONE_CORSI_SECUREKEY' , '^%ED!so+-M:IM8IZv');
  * ==== FILE INI DI IMPOSTAZIONI =====
  * ===================================
  */
-define ('CORSI_INI' , 'pdf/corsi.ini');
+define ('CORSI_INI' , 'pdf/modelli/crs/settings.ini');
 
 
 /*

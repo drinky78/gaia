@@ -684,7 +684,7 @@ class Corso extends GeoEntita {
      */
     public function generaAttestato($risultato, $iscritto, $verbale) {
         // leggo i settaggi per il corso specifico
-        $settings = Utility::parse_ini(CORSI_INI, true);   
+        $settings = Utility::parse_ini(CORSI_INI, true);
         
         // verifico il sesso del volontario
         $sesso = null;
@@ -1224,10 +1224,8 @@ class Corso extends GeoEntita {
         
         $contatore = 0;
         
-         // Verbale, generazione e invio
-        $f = $this->generaVerbale($risultati);
-        $this->verbale = $f->id;
-        $this->inviaVerbale($f);
+        
+        
         
         $verbale = array();
         $verbale["progressivo"] = "001/2015";
@@ -1245,8 +1243,7 @@ class Corso extends GeoEntita {
                 $f = $this->generaAttestato($risultato, $volontario, $verbale);
                 $risultato->file = $f->id;
                 $risultato->generato = 1;
-                
-                exit -1;
+
                 $this->inviaAttestato($risultato, $volontario, $f);
                 
                 // Aggiunto il titolo al discente che ha superato il corso
@@ -1259,7 +1256,12 @@ class Corso extends GeoEntita {
             }
             
         }
-  
+        
+        // Verbale, generazione e invio
+        $f = $this->generaVerbale($risultati);
+        $this->verbale = $f->id;
+        $this->inviaVerbale($f);
+        
         $this->stato = CORSO_S_CHIUSO;
         
         return $contatore;
