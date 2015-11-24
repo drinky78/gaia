@@ -1,0 +1,121 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>ATTESTATO</title>
+        <meta name="generator" content="Gaia">
+        <meta name="author" content="Gaia">
+        <meta name="created" content="20140705;164000000000000">
+        <meta name="changedby" content="Gaia">
+        <meta name="changed" content="20140926;144628600022544">
+
+        <style>
+            html, body {
+                width: 297mm;
+                height: 210mm;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+                
+                top:0px; left:0px;
+            }
+            
+            img.background{
+                position:absolute; top:0; left:0; z-index: 1;
+                width: 297mm; height: 210mm;
+            }
+            
+            div.content{
+                position:absolute;
+                top:0; left:0; 
+                width: 297mm; height: 210mm;
+                z-index: 10;
+                color: black; 
+            }
+
+            #datiCandidato {
+                  text-align: center;
+                position:absolute; z-index: 100;
+                top: 50mm; left: 0mm;
+                width: 100%;
+            }
+            #datiCandidato > div.comitato{color: red; font-size: 6mm; margin-bottom: 5mm}
+            #datiCandidato > div.intro{font-size: 6mm; }
+            #datiCandidato > div.volontario{    font-size: 10mm;
+    margin-top: 5mm;}
+            #datiCandidato > div.codicefiscale{    margin-top: 1mm;
+    margin-bottom: 3mm;}
+            #datiCandidato > div.testo{    font-size: 6mm;
+    margin: 5mm 30mm;}
+            #datiCandidato > div.titolo{    font-size: 7mm;
+    margin-top: 3mm;
+    font-weight: bold;}
+            
+            #datiAttestato{
+                position:absolute; z-index: 100;
+                bottom: 5mm; left: 9mm;
+                width: 87mm; height: 34mm;
+            }
+            #datiAttestato > div.luogo{position:absolute; left: 24mm; top: 3mm;}
+            #datiAttestato > div.dd{position:absolute; top:13mm; left:17mm}
+            #datiAttestato > div.mm{position:absolute; top:13mm; left:30mm}
+            #datiAttestato > div.yy{position:absolute; top:13mm; left:44mm}
+            #datiAttestato > div.codice{position:absolute; top:23mm; left:31mm}
+            #datiAttestato > div.anno{position:absolute; top:23mm; left:64mm}
+            
+            #datiFaculty{
+                position:absolute; z-index: 100;
+                bottom: 5mm; left: 100mm;
+                width: 200mm; height: 34mm;
+            }
+            div.direttore{position:absolute; top:15mm; left:8mm}
+            div.rappresentante{position:absolute; top:15mm; left:72mm}
+            div.presidente{position:absolute; top:15mm; left:134mm}
+            
+            /*
+            div.volontario{position:relative; bottom:73mm; left: 236mm; font-size: 40px;}
+            div.presidente{bottom:73mm; left: 236mm}
+            */
+            
+        </style>
+    </head>
+    
+    <body lang="it-IT" text="#000000" dir="ltr">
+       
+        <div class="content">
+        
+            <div id="datiCandidato">
+                <div class="comitato">Comitato Provinciale di Bologna</div>
+                <div class="intro">Visto il verbale 001/15 della Commissione di Verifica<br/>in data 01/01/2015, si attesta che, il Volontario:</div>
+                <div class="volontario">PIETRO FERRARESI</div>
+                <div class="codicefiscale">C.F.: FRRPTR79R11a944x</div>
+                <div class="testo">
+                    avendo sostenuto con profitto la Verifica di Abilitazione del modulo formativo “Trasporto Sanitario” svolto secondo le Linee Guida-Operatori Volontari addetti al Trasporto Sanitario Nazionale e Soccorso con Ambulanza (TSSA)” approvate con Ordinanza Presidenziale n. 0004-14 del 13 gennaio 2014 è
+                </div>
+                <div class="titolo">
+                    OPERATORE TRASPORTO SANITARIO CRI
+                </div>
+            </div>
+             
+            <section id="datiFaculty">
+                <div class="direttore">_DIRETTORE</div>
+                <div class="rappresentante">_RAPPRESENTANTE</div>
+                <div class="presidente">_PRESIDENTE</div>
+            </section>
+
+
+            <section id="datiAttestato">
+                <div class="luogo">_LUOGO</div>
+
+                <div class="dd">_DD</div>
+                <div class="mm">_MM</div>
+                <div class="yy">_YYYY</div>
+
+                <div class="codice">_PROGRESSIVO</div>
+                <div class="anno">_ANNO</div>
+            </section>
+            
+        </div>
+        
+        <img src="./img/pdf/tssa.jpg" class="background" alt="background" />
+    </body>
+</html>
