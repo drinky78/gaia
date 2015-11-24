@@ -157,4 +157,32 @@ class Utility {
         return null;
     }
     
+    /**
+     * Ritorna true se $haystack inizia con la stringa $needle
+     * 
+     * @param type $haystack
+     * @param type $needle
+     * @return type
+     */
+    public static function startsWith($haystack, $needle) {
+        $length = strlen($needle);
+        return (substr($haystack, 0, $length) === $needle);
+    }
+
+    /**
+     * Ritorna true se $haystack finisce con la stringa $needle
+     * 
+     * @param type $haystack
+     * @param type $needle
+     * @return boolean
+     */
+    public static function endsWith($haystack, $needle) {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }
+
 }

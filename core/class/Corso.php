@@ -682,7 +682,7 @@ class Corso extends GeoEntita {
      * Genera attestato, sulla base del corso e del volontario
      * @return PDF 
      */
-    public function generaAttestato($risultato, $iscritto) {
+    public function generaAttestato($risultato, $iscritto, $verbale) {
         // leggo i settaggi per il corso specifico
         $settings = Utility::parse_ini(CORSI_INI, true);   
         
@@ -710,13 +710,12 @@ class Corso extends GeoEntita {
         $logoCustom = "";
         $templateAttestato = $settings["TIPOCORSO_".$this->tipo]["TEMPLATE_FILE"];
         $orientamento = $settings["TIPOCORSO_".$this->tipo]["TEMPLATE_ORIENTAMENTO"];
-                
         if (!empty($settings["TIPOCORSO_".$this->tipo][$regione])){
-            $templateAttestato = $templateAttestato.'_v2';
+            $templateAttestato = $settings["TIPOCORSO_".$this->tipo]["TEMPLATE_FILE_V2"];
             $logoCustom = $settings["TIPOCORSO_".$this->tipo][$regione];
         }
         if (!empty($settings["TIPOCORSO_".$this->tipo][$provincia])){
-            $templateAttestato = $templateAttestato.'_v2';
+            $templateAttestato = $settings["TIPOCORSO_".$this->tipo]["TEMPLATE_FILE_V2"];
             $logoCustom = $settings["TIPOCORSO_".$this->tipo][$provincia];
         }
         if (is_object($logoCustom) || is_array($logoCustom)){
@@ -727,10 +726,13 @@ class Corso extends GeoEntita {
          
         $logoCustom = $regione."_".$provincia;
         $p = new PDF($templateAttestato, $nomefile);
+        $p->_VERBALEPROGRESSIVO = $verbale["progressivo"];
+        $p->_VERBALEDATA     = $verbale["data"];
         $p->_COMITATO     = maiuscolo($comitato);
         $p->_CORSO        = $tipo->nome;
-        $p->_PROGRESSIVO  = $this->seriale;
+        $p->_PROGRESSIVO  = substr($this->seriale, 5) ;
         $p->_DIRETTORE    = $this->direttore()->nomeCompleto();
+        $p->_RAPPRESENTANTE = $this->direttore()->nomeCompleto();
         $p->_PRESIDENTE   = $this->presidente()->nomeCompleto();
         $p->_SERIALE      = $risultato->seriale;
         $p->_ANNO         = date('Y', time());
@@ -1221,6 +1223,16 @@ class Corso extends GeoEntita {
         $risultati = $this->risultati();
         
         $contatore = 0;
+        
+         // Verbale, generazione e invio
+        $f = $this->generaVerbale($risultati);
+        $this->verbale = $f->id;
+        $this->inviaVerbale($f);
+        
+        $verbale = array();
+        $verbale["progressivo"] = "001/2015";
+        $verbale["data"] = "xx/xx/2015";
+        
         foreach($risultati as $risultato){
             $volontario = $risultato->volontario();
 
@@ -1230,10 +1242,11 @@ class Corso extends GeoEntita {
                 $risultato = RisultatoCorso::id($risultato->id);
 
                 $contatore++;
-                $f = $this->generaAttestato($risultato, $volontario);
+                $f = $this->generaAttestato($risultato, $volontario, $verbale);
                 $risultato->file = $f->id;
                 $risultato->generato = 1;
-
+                
+                exit -1;
                 $this->inviaAttestato($risultato, $volontario, $f);
                 
                 // Aggiunto il titolo al discente che ha superato il corso
@@ -1246,12 +1259,7 @@ class Corso extends GeoEntita {
             }
             
         }
-        
-        // Verbale, generazione e invio
-        $f = $this->generaVerbale($risultati);
-        $this->verbale = $f->id;
-        $this->inviaVerbale($f);
-        
+  
         $this->stato = CORSO_S_CHIUSO;
         
         return $contatore;

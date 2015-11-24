@@ -20,7 +20,12 @@ class PDF {
     public function __construct ( $modello, $nome ) {
         global $db;
         $this->db = $db;
-        if ( !file_exists('./core/conf/pdf/modelli/' . $modello .'.html') ) {
+        
+        if (Utility::endsWith($modello, ".html")){
+            $modello = str_replace(".html", "", $modello);
+        }
+        
+        if ( !file_exists('./core/conf/pdf/modelli/' . $modello .'.html') ) {  
             throw new Errore(1012);
         }
         $this->modello = $modello;
