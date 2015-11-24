@@ -307,6 +307,12 @@ $_descrizione   = 'Crediamo in una Croce Rossa Italiana che sa muoversi veloceme
                                             <li class="nav-header">Corsi</li>
 
                                             <li>
+                                                <a href="?p=formazione.titoli.cerca">
+                                                    <i class="icon-graduation-cap"></i>
+                                                    Assegnazione Titoli 
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <a href="?p=formazione.corsi">
                                                     <i class="icon-list"></i>
                                                     Calendario corsi
@@ -314,7 +320,7 @@ $_descrizione   = 'Crediamo in una Croce Rossa Italiana che sa muoversi veloceme
                                             </li>
                                             <li>
                                                 <a href="?p=formazione.corsi.crea">
-                                                    <i class="icon-graduation-cap"></i>
+                                                    <i class="icon-book"></i>
                                                     Crea nuovo corso
                                                 </a>
                                             </li>
