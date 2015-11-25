@@ -67,7 +67,7 @@ class PartecipazioneCorso extends Entita {
      * @return PDF 
      */
     public function inviaInvito(Corso $c) {
-        $m = new Email('crs_invitoDocente', "Invito ".$this->id);
+        $m = new Email('crs/invitoDocente', "Invito ".$this->id);
 
         $m->a = $this->volontario();
         //$m->da = "pizar79@gmail.com";

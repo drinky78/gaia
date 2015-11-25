@@ -668,7 +668,7 @@ class Corso extends GeoEntita {
         
         $tipo = TipoCorso::id($this->tipo);
        
-        $m = new Email('crs_inviaVerbale', "Verbale".$this->seriale);
+        $m = new Email('crs/inviaVerbale', "Verbale".$this->seriale);
         //$m->a = $aut->partecipazione()->volontario();
         //$m->da = "pizar79@gmail.com";
         $m->a = $this->direttore();
@@ -776,7 +776,7 @@ class Corso extends GeoEntita {
         
         $tipo = TipoCorso::id($this->tipo);
        
-        $m = new Email('crs_invioAttestato', "Invio Certificato" );
+        $m = new Email('crs/invioAttestato', "Invio Certificato" );
         //$m->a = $aut->partecipazione()->volontario();
         //$m->da = "pizar79@gmail.com";
         $m->a = $iscritto;
@@ -860,7 +860,7 @@ class Corso extends GeoEntita {
        
         $tipo = TipoCorso::id($this->tipo);
        
-        $m = new Email('crs_richiestaIscrizione', "Richiesta di iscrizione ad un corso" );
+        $m = new Email('crs/richiestaIscrizione', "Richiesta di iscrizione ad un corso" );
         //$m->a = $aut->partecipazione()->volontario();
         //$m->da = "pizar79@gmail.com";
         $m->a = $this->presidente()->email;
