@@ -9,6 +9,11 @@ controllaParametri(['id','discIdoneita','discAffiancamenti'], 'formazione.corsi.
 $idoneitaDisc = filter_input(INPUT_POST, 'discIdoneita', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $idoneitaAff = filter_input(INPUT_POST, 'affIdoneita', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
+$scrittoDisc = filter_input(INPUT_POST, 'discScritto', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$praticaDisc = filter_input(INPUT_POST, 'discPratica', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$presidioDisc = filter_input(INPUT_POST, 'discPresidio', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+$noteDisc = filter_input(INPUT_POST, 'discNote', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
 $affiancamentiDisc = filter_input(INPUT_POST, 'discAffiancamenti', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $segnalazioniDisc = filter_input(INPUT_POST, 'discSegnalazioni', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
@@ -88,7 +93,10 @@ foreach ($idoneitaDisc as $volontario => $risultato) {
         }
     }
     $r->timestamp = $now->getTimestamp();
-    $r->note = $r->note  . "";
+    $r->note = $r->note  . "\r\n\r\nProva scritta: ".@$scrittoDisc[$volontario].
+            "\r\n\r\nProva pratica: ".@$praticaDisc[$volontario].
+            "\r\n\r\nUtilizzo presidio: ".@$presidioDisc[$volontario].
+            "\r\n\r\n".@$noteDisc[$volontario];
 }
 
 foreach ($idoneitaAff as $volontario => $risultato) {

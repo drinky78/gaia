@@ -87,19 +87,15 @@ $d = new DateTime('@' . $c->inizio);
                 <div class="row-fluid">
                     <h3>Discenti</h3>
                 </div>
-                <div class="row-fluid">
-                    <div class="span3"><label>Nome</label></div>
-                    <div class="span2"><label>Idoneità</label></div>
-                    <div class="span2"><label>Affiancamenti</label></div>
-                    <div class="span5"><label>Segnalazione</label></div>
-                </div>
                 <?php foreach ($discenti as $d) { 
                     ?>
+                    <hr/>
                     <div class="row-fluid">
                         <div class="span3">
                             <label for="dataFine"><i class="icon-user"></i> <?php echo $d->volontario()->nome ?><br/><?php echo $d->volontario()->cognome ?></label>
                         </div>
                         <div class="span2">
+                            <label>Idoneità</label>
                             <select name="discIdoneita[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
                                 <option value="<?php echo CORSO_RISULTATO_NESSUNO ?>">...</option>
                                 <option value="<?php echo CORSO_RISULTATO_NON_IDONEO ?>"><?php echo $conf['risultato'][CORSO_RISULTATO_NON_IDONEO] ?></option>
@@ -107,6 +103,7 @@ $d = new DateTime('@' . $c->inizio);
                             </select>
                         </div>
                         <div class="span2">
+                            <label>Affiancamenti</label>
                             <select name="discAffiancamenti[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
                                 <option value="0">Nessuno</option>
                                 <option value="1">1</option>
@@ -117,6 +114,7 @@ $d = new DateTime('@' . $c->inizio);
                             </select>
                         </div>
                         <div class="span5">
+                            <label>Segnalazioni</label>
                             <select name="discSegnalazioni[<?php echo $d->volontario()->id ?>][]" class="chosen-select" multiple="" data-placeholder="Aggiungi segnalatori">
                                 <option value=""></option>
                             <?php foreach ($docenti as $i) { 
@@ -125,6 +123,66 @@ $d = new DateTime('@' . $c->inizio);
                                 <option value="<?php echo $v->id?>"><?php echo $v->nomeCompleto() ?></option>
                             <?php } ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span3">
+                        </div>
+                        <div class="span3">
+                            <label>Prova scritta</label>
+                            <select name="discScritto[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                                <option value="100">100</option>
+                                <option value="90">90</option>
+                                <option value="80">80</option>
+                                <option value="70">70</option>
+                                <option value="60">60</option>
+                                <option value="50">50</option>
+                                <option value="40">40</option>
+                                <option value="30">30</option>
+                                <option value="20">20</option>
+                                <option value="10">10</option>
+                                <option value="0">0</option>
+                            </select>
+                        </div>
+                        <div class="span3">
+                            <label>Prova pratica</label>
+                            <select name="discPratica[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                                <option value="100">100</option>
+                                <option value="90">90</option>
+                                <option value="80">80</option>
+                                <option value="70">70</option>
+                                <option value="60">60</option>
+                                <option value="50">50</option>
+                                <option value="40">40</option>
+                                <option value="30">30</option>
+                                <option value="20">20</option>
+                                <option value="10">10</option>
+                                <option value="0">0</option>
+                            </select>
+                        </div>
+                        <div class="span3">
+                            <label>Utilizzo presidio</label>
+                            <select name="discPresidio[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                                <option value="100">100</option>
+                                <option value="90">90</option>
+                                <option value="80">80</option>
+                                <option value="70">70</option>
+                                <option value="60">60</option>
+                                <option value="50">50</option>
+                                <option value="40">40</option>
+                                <option value="30">30</option>
+                                <option value="20">20</option>
+                                <option value="10">10</option>
+                                <option value="0">0</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span3">&nbsp;
+                        </div>
+                        <div class="span9">
+                            <label>Note</label>
+                            <textarea name="discNote[<?php echo $d->volontario()->id ?>]"  class="input-block-level"></textarea>
                         </div>
                     </div>
                     <?php
@@ -138,6 +196,7 @@ $d = new DateTime('@' . $c->inizio);
                 </div>
                 <?php foreach ($affiancamenti as $a) { 
                     ?>
+                    <hr/>
                     <div class="row-fluid">
                         <div class="span3">
                             <label for="dataFine"><i class="icon-user"></i> <?php echo $a->volontario()->nome ?><br/><?php echo $a->volontario()->cognome ?></label>
