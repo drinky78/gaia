@@ -93,7 +93,7 @@ $geoComitato = GeoPolitica::daOid($corso->organizzatore);
         <hr />
         <div class="row-fluid allinea-centro">
             <div class="span12">
-                <h2 class="text-success"><?php echo $corso->titolo; ?></h2>
+                <h2 class="text-success"><?php echo $tipoCorso->nome; ?></h2>
                 <h4 class="text-info">
                     <i class="icon-map-marker"></i>
                     <a target="_new" href="<?php echo $corso->linkMappa(); ?>">
@@ -148,11 +148,13 @@ $geoComitato = GeoPolitica::daOid($corso->organizzatore);
                     Partecipazione
                 </span><br />
                 <span class="text-info">
-                    <?php if ($puoPartecipare) { ?>
+                    <?php if (!empty($me) && $puoPartecipare) { ?>
                         <a id="pulsanteIscriviti" class="btn btn-info pull-right" href="?p=formazione.corsi.iscriviti&id=<?php echo $corso->id ?>">
                             <i class="icon-pencil"></i>
                             Richiedi iscrizione
                         </a>
+                    <?php } else { ?>
+                        <span>Per inviare una richiesta di iscrizione, è necessario accedere a Gaia con username e password</span>
                     <?php } ?>
                 </span>
             </div>
