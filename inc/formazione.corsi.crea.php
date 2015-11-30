@@ -116,7 +116,7 @@ var minDateOffset = <?php echo TipoCorso::limiteMinimoPerIscrizione()?>;
                         <label for="partecipanti"><i class="icon-calendar"></i> Numero Partecipanti</label>
                     </div>
                     <div class="span8">
-                        <select id="partecipantiCbx" style="width: 50px;"></select>
+                        <select id="partecipantiCbx" name="partecipanti"  style="width: 50px;"></select>
                         <?php /*
                         <input id="partecipanti" class="span12 hasDatepicker" name="partecipanti" value="<?php echo @$c->partecipanti ?>" type="text">
                         */
