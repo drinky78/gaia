@@ -17,9 +17,15 @@ class Email {
             $da         = null;
     
     public function __construct ( $modello, $oggetto ) {
+        
+        if (Utility::endsWith($modello, ".html")){
+            $modello = str_replace(".html", "", $modello);
+        }
+        
         if ( !file_exists(static::_file_modello($modello)) ) {
             throw new Errore(1012);
         }
+        
         $this->oggetto = $oggetto;
         $this->modello = $modello;
     }

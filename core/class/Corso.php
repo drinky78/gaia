@@ -815,10 +815,9 @@ class Corso extends GeoEntita {
         $comitato = $this->organizzatore();
         //$tipo = TipoCorso::id($this->tipo);
        
-        $m = new Email("crs_inviaCreazioneCorso", "Corso Creato");
+        $m = new Email("crs/inviaCreazioneCorso", "Corso Creato");
         $a = $comitato->regionale()->email;
-		print_r($email);
-		// "email:".$email;
+
         if (empty($email)){
             $a = Volontario::id("2");
         }

@@ -89,6 +89,7 @@ var minDateOffset = <?php echo TipoCorso::limiteMinimoPerIscrizione()?>;
                     </div>
                     <div class="span8">
                         <select id="tipoCbx" name="tipo" style="width: auto">
+                            <option>seleziona</option>
                             <?php foreach ($tipocorsi as $t) { ?>
                                 <option data-min="<?php echo $t->minimoPartecipanti; ?>" data-max="<?php echo $t->massimoPartecipanti; ?>" value="<?php echo $t->id ?>" <?php echo ($t->id==$_tipocorsoId) ? "selected='selected'" : '' ?>><?php echo $t->nome ?></option>
                             <?php } ?>
