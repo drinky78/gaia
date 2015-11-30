@@ -88,9 +88,9 @@ var minDateOffset = <?php echo TipoCorso::limiteMinimoPerIscrizione()?>;
                         <label for="tipologia"><i class="icon-certificate"></i> Tipologia</label>
                     </div>
                     <div class="span8">
-                        <select name="tipo">
+                        <select id="tipoCbx" name="tipo" style="width: auto">
                             <?php foreach ($tipocorsi as $t) { ?>
-                                <option value="<?php echo $t->id ?>" <?php echo ($t->id==$_tipocorsoId) ? "selected='selected'" : '' ?>><?php echo $t->nome ?></option>
+                                <option data-min="<?php echo $t->minimoPartecipanti; ?>" data-max="<?php echo $t->massimoPartecipanti; ?>" value="<?php echo $t->id ?>" <?php echo ($t->id==$_tipocorsoId) ? "selected='selected'" : '' ?>><?php echo $t->nome ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -116,7 +116,11 @@ var minDateOffset = <?php echo TipoCorso::limiteMinimoPerIscrizione()?>;
                         <label for="partecipanti"><i class="icon-calendar"></i> Numero Partecipanti</label>
                     </div>
                     <div class="span8">
+                        <select id="partecipantiCbx" style="width: 50px;"></select>
+                        <?php /*
                         <input id="partecipanti" class="span12 hasDatepicker" name="partecipanti" value="<?php echo @$c->partecipanti ?>" type="text">
+                        */
+                        ?>
                     </div>
                 </div>
                 <div class="row-fluid">
