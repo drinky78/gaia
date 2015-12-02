@@ -94,6 +94,9 @@ class Corso extends GeoEntita {
                 if ($var > $this->numeroDocenti() * $tipo->proporzioneIstruttori) {
                     $err |= CORSO_VALIDAZIONE_TROPPI_PARTECIPANTI;
                 }
+                if ($var < $tipo->minimoPartecipanti) {
+                    $err |= CORSO_VALIDAZIONE_POCHI_PARTECIPANTI;
+                }
                 if ($this->numeroDocentiNecessari() != $this->numeroDocenti()) {
                     $err |= CORSO_VALIDAZIONE_ERRATO_NUMERO_DOCENTI;
                 }
@@ -128,6 +131,9 @@ class Corso extends GeoEntita {
                 $var = $this->partecipanti;
                 if ($var > $this->numeroDocenti() * $tipo->proporzioneIstruttori) {
                     $err |= CORSO_VALIDAZIONE_TROPPI_PARTECIPANTI;
+                }
+                if ($var < $tipo->minimoPartecipanti) {
+                    $err |= CORSO_VALIDAZIONE_POCHI_PARTECIPANTI;
                 }
                 if ($this->numeroDocentiNecessari() != $this->numeroDocenti()) {
                     $err |= CORSO_VALIDAZIONE_ERRATO_NUMERO_DOCENTI;

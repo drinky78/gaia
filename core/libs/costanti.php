@@ -989,6 +989,7 @@ $conf['validazione_corsi'] = [
     CORSO_VALIDAZIONE_RESPONSABILE_MANCANTE    =>  'Manca un responsabile',
     CORSO_VALIDAZIONE_DIRETTORE_MANCANTE    =>  'Manca un direttore',
     CORSO_VALIDAZIONE_NESSUN_PARTECIPANTE    =>  'Mancano partecipanti',
+    CORSO_VALIDAZIONE_POCHI_PARTECIPANTI    =>  'Pochi partecipanti',
     CORSO_VALIDAZIONE_TROPPI_PARTECIPANTI    =>  'Troppi partecipanti per il numero di docenti presenti',
     CORSO_VALIDAZIONE_ERRATO_NUMERO_DOCENTI    =>  'Numero docenti diverso da quanto necessario',
     CORSO_VALIDAZIONE_TROPPI_AFFIANCAMENTI    =>  'Troppi affiancamenti'
