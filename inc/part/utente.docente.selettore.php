@@ -21,7 +21,7 @@ if (!isset($maxDocenti)) {
         var element = $(".chosen-select.docenti");
         var ruolo = element.data("ruolo");
         var qualifica = element.data("qualifica");
-        var comitato = element.data("comitato");
+        //var comitato = element.data("comitato");
 
         var select = $(".chosen-select.docenti");
         var input = null;
@@ -47,7 +47,7 @@ if (!isset($maxDocenti)) {
                     return;
                 }
                                 
-                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreDocente', comitati: comitato, stato_docente: stato_docente, ruolo: ruolo, qualifica: qualifica}, function (x) {
+                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreDocente', stato_docente: stato_docente, ruolo: ruolo, qualifica: qualifica}, function (x) {
                     select.children().remove('option:not(:selected)');
                         if (x.risposta.risultati.length) {
                     for (var i in x.risposta.risultati) {

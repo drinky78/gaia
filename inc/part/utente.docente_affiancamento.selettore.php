@@ -21,7 +21,7 @@ if (!isset($maxAffiancamenti)) {
         var element = $(".chosen-select.affiancamenti");
         var ruolo = element.data("ruolo");
         var qualifica = element.data("qualifica");
-        var comitato = element.data("comitato");
+        //var comitato = element.data("comitato");
         
         var select = $(".chosen-select.affiancamenti");
         var input = null;
@@ -47,7 +47,7 @@ if (!isset($maxAffiancamenti)) {
                     return;
                 }
                                 
-                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreAffiancamento', comitati: comitato, stato_affiancamento: stato_affiancamento, ruolo: ruolo, qualifica: qualifica}, function (x) {
+                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreAffiancamento', stato_affiancamento: stato_affiancamento, ruolo: ruolo, qualifica: qualifica}, function (x) {
                     select.children().remove('option:not(:selected)');
                         if (x.risposta.risultati.length) {
                     for (var i in x.risposta.risultati) {
