@@ -14,11 +14,13 @@ try {
     if (empty($c)) {
         throw new Exception('Manomissione');
     }
-    $tipocorso = TipoCorso::id($c->tipo);
+    $tipoCorso = TipoCorso::id($c->tipo);
 
 } catch(Exception $e) {
     redirect('admin.corsi.crea&err='.CORSO_ERRORE_CORSO_NON_TROVATO);
 }
+
+
 
 if (!$c->modificabile()) {
     redirect('formazione.corsi.riepilogo&id='.$id);
@@ -39,8 +41,8 @@ foreach ($partecipazioni as $p) {
 }
 unset($partecipazioni);
 
-$ruolo = $tipocorso->ruoloDocenti;
-$qualifica = $tipocorso->qualifica;
+$ruolo = $tipoCorso->ruoloDocenti;
+$qualifica = $tipoCorso->qualifica;
 
 // carica i selettori
 caricaSelettoreDocente([
@@ -61,7 +63,7 @@ $d = new DateTime('@' . $c->inizio);
             <input value="<?php echo empty($wizard) ? 0 : 1 ?>" name="wizard" type="hidden">
             <div class="alert alert-block alert-success">
                 <div class="row-fluid">
-                    <h4><i class="icon-question-sign"></i> Docenti per <?php echo $certificato->nome ?> del <?php echo $d->format('d/m/Y'); ?></h4>
+                    <h4><i class="icon-question-sign"></i> Docenti per <?php echo $tipoCorso->nome ?> del <?php echo $d->format('d/m/Y'); ?></h4>
                 </div>
                 <hr>
                 <div class="row-fluid">

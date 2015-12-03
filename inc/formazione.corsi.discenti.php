@@ -60,7 +60,7 @@ $qualifica = $tipocorso->qualifica;
             <input value="<?php echo empty($wizard) ? 0 : 1 ?>" name="wizard" type="hidden">
             <div class="alert alert-block alert-success">
                 <div class="row-fluid">
-                    <h4><i class="icon-question-sign"></i> Discenti per <?php echo $certificato->nome ?> del <?php echo $d->format('d/m/Y'); ?></h4>
+                    <h4><i class="icon-question-sign"></i> Discenti per <?php echo $tipoCorso->nome ?> del <?php echo $d->format('d/m/Y'); ?></h4>
                 </div>
                 <hr>
                 <div class="row-fluid">

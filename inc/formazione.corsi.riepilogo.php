@@ -43,13 +43,16 @@ $files = array(
 //    array('url' => '#', 'name' => 'Documento con nome lungo 4'),
 );
 
-$docenti = $discenti = $affiancamenti = [];
+$direttori = $docenti = $discenti = $affiancamenti = [];
 
 $partecipazioni = $c->partecipazioni();
 
 foreach ($partecipazioni as $i) {
     $v = $i->volontario();
     switch ($i->ruolo) {
+        case CORSO_RUOLO_DIRETTORE:
+            $direttori[] = [ 'id' => $v->id, 'nome' => $v->nomeCompleto(), 'confermato'=> true];
+            break;
         case CORSO_RUOLO_DOCENTE:
             $docenti[] = [ 'id' => $v->id, 'nome' => $v->nomeCompleto(), 'confermato'=> true];
             break;
@@ -86,6 +89,7 @@ foreach ($partecipazioni as $i) {
 unset($partecipazioni);
 
 
+$checkDirettore = !$direttori[0]['confermato'];
 $checkDocenti = $c->numeroDocentiMancanti();
 $checkAffiancamenti = $c->numeroAffiancamenti() > ($c->numeroDocentiNecessari() * intval($c->tipo()->proporzioneAffiancamento));
 $checkDiscenti = $c->postiLiberi();
@@ -190,6 +194,12 @@ $geoComitato = GeoPolitica::daOid($c->organizzatore);
                         <?php echo $err ?> 
                     </div>
                     <?php } ?>
+                    <?php if ($checkDirettore) { ?>
+                    <div>
+                        <i class="icon-warning-sign"></i>
+                        Manca il direttore
+                    </div>
+                    <?php } ?>
                     <?php if ($checkDocenti) { ?>
                     <div>
                         <i class="icon-warning-sign"></i>
@@ -248,6 +258,7 @@ $geoComitato = GeoPolitica::daOid($c->organizzatore);
                 <a href="?p=utente.mail.nuova&id=<?php echo $direttore->id; ?>">
                     <?php echo empty($direttore) ? '<a href="?p=formazione.corsi.direttore&id='.$c->id.'" class="btn btn-default">SCEGLI DIRETTORE</a>' : $direttore->nomeCompleto() ?>
                 </a>
+                <?php if (!$direttori[0]['confermato']) { ?><br/><span>Non confermato</span><?php } ?>
             </div>
         </div>
         <hr />
