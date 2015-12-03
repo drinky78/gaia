@@ -303,15 +303,17 @@ $_descrizione   = 'Crediamo in una Croce Rossa Italiana che sa muoversi veloceme
                                                 </a>
                                             </li>
                                               
-                                            <?php if (sizeof($deleghe[OBIETTIVO_1]) > 0 || $me->admin() || $me->presiede()) { ?>
                                             <li class="nav-header">Corsi</li>
 
+                                            <?php if (sizeof($deleghe[OBIETTIVO_1]) > 0 || $me->admin()) { /* solo per admin e DTN Area1 */?>
                                             <li>
                                                 <a href="?p=formazione.titoli.cerca">
                                                     <i class="icon-graduation-cap"></i>
                                                     Assegnazione Titoli 
                                                 </a>
                                             </li>
+                                            <?php } ?>
+                                            <?php if (sizeof($deleghe[OBIETTIVO_1]) > 0 || $me->admin() || $me->presiede()) { ?>
                                             <li>
                                                 <a href="?p=formazione.corsi">
                                                     <i class="icon-list"></i>

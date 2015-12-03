@@ -7,8 +7,11 @@ error_reporting(E_ALL);
 /*
  * QUESTA PAGINA DEVE ESSERE ACCESSIBILE SOLO A: PRESIDENTE NAZIONALE, DTN OBIETTIVO 1 E SUOI DELEGATI
  */
-
-paginaPresidenziale(null, null, APP_OBIETTIVO, OBIETTIVO_1);
+$deleghe = $me->delegazioniAsHashMap(APP_OBIETTIVO);
+if (!(sizeof($deleghe[OBIETTIVO_1]) > 0 || $me->admin())) {
+    redirect('formazione.corsi');
+    die;
+}
 
 caricaSelettoreDiscente([
     'max_selected_options' => $maxDirettori,
