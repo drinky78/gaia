@@ -52,7 +52,7 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
                     <?php if(intval($f->ruoloAttestato) === intval($r->id)):?>
                         <?php $selected = "selected='selected'"; ?>
                     <?php endif ?>
-                    <option <?php print $selected; ?>><?php print $r->ruolo?></option>
+                    <option value="<?php print intval($r->id) ?>" <?php print $selected; ?>><?php print $r->ruolo?></option>
                 <?php endforeach; ?>
             </select> 
         </div>
@@ -137,7 +137,7 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
                     <?php if(intval($f->qualifica) === intval($q->id)):?>
                         <?php $selected = "selected='selected'"; ?>
                     <?php endif ?>
-                    <option <?php print $selected; ?>><?php print $q->nome?></option>
+                    <option value="<?php print $q->id; ?>" <?php print $selected; ?>><?php print $q->nome?></option>
                 <?php endforeach; ?>
             </select> 
         </div>
@@ -155,7 +155,7 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
                     <?php if(intval($f->ruoloDirettore) === intval($r->id)):?>
                         <?php $selected = "selected='selected'"; ?>
                     <?php endif ?>
-                    <option <?php print $selected; ?>><?php print $r->ruolo?></option>
+                    <option value="<?php print $r->id; ?>" <?php print $selected; ?>><?php print $r->ruolo?></option>
                 <?php endforeach; ?>
             </select> 
         </div>
@@ -171,7 +171,7 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
                     <?php if(intval($f->ruoloDocenti) === intval($r->id)):?>
                         <?php $selected = "selected='selected'"; ?>
                     <?php endif ?>
-                    <option <?php print $selected; ?>><?php print $r->ruolo?></option>
+                    <option value="<?php print $r->id; ?>" <?php print $selected; ?>><?php print $r->ruolo?></option>
                 <?php endforeach; ?>
             </select> 
         </div>
@@ -187,7 +187,7 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
                     <?php if(intval($f->ruoloAffiancamento) === intval($r->id)):?>
                         <?php $selected = "selected='selected'"; ?>
                     <?php endif ?>
-                    <option <?php print $selected; ?>><?php print $r->ruolo?></option>
+                    <option value="<?php print $r->id; ?>" <?php print $selected; ?>><?php print $r->ruolo?></option>
                 <?php endforeach; ?>
             </select>
             
@@ -205,7 +205,7 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
                     <?php if(intval($f->ruoloDiscenti) === intval($r->id)):?>
                         <?php $selected = "selected='selected'"; ?>
                     <?php endif ?>
-                    <option <?php print $selected; ?>><?php print $r->ruolo?></option>
+                    <option value="<?php print $r->id; ?>" <?php print $selected; ?>><?php print $r->ruolo?></option>
                 <?php endforeach; ?>
             </select>
             
