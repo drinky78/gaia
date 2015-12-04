@@ -13,7 +13,23 @@ try {
     $c = Corso::id(intval($_POST['id']));
     
     if (!$c->modificabile() /*|| !$c->modificabileDa($me) */) {
-        redirect('formazione.corsi.riepilogo&id='.$c->id.'&err=1');
+
+        $geoComitato = GeoPolitica::daOid($c->organizzatore);
+
+//        redirect('formazione.corsi.riepilogo&id='.$c->id.'&err=1');
+        $m = new Email('crs/modificaPeriodoBuffer', "Invito " . $this->id);
+
+        // inviare a regionale e/o nazionale
+        $m->a = $geoComitato->regionale()->email;
+        $m->a = $geoComitato->nazionale()->email;
+
+        $m->_NOME = $this->volontario()->nomeCompleto();
+        $m->_HOSTNAME = filter_input(INPUT_SERVER, "SERVER_NAME");
+        $m->_CORSO = $c->nome();
+        $m->_DATA = $c->inizio();
+        $m->_ID = $this->id;
+        $m->_MD5 = $this->md5;
+        $m->invia();
     }
 
     if (empty($c) || !is_array($docenti)) {

@@ -18,9 +18,10 @@ try {
     redirect('formazione.corsi.crea&err');
 }
 
-if (!$c->modificabile()) {
-    redirect('formazione.corsi.riepilogo&id='.$id);
-}
+// Ora manda solo la mail in caso di modifiche entro i 15 giorni
+//if (!$c->modificabile()) {
+//    redirect('formazione.corsi.riepilogo&id='.$id);
+//}
 
 $maxDirettori = 1;
 

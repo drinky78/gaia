@@ -22,9 +22,9 @@ try {
 
 
 
-if (!$c->modificabile()) {
-    redirect('formazione.corsi.riepilogo&id='.$id);
-}
+//if (!$c->modificabile()) {
+//    redirect('formazione.corsi.riepilogo&id='.$id);
+//}
 
 // calcola il numero massimo di docenti per il corso
 $maxDocenti = $c->numeroDocentiNecessari();

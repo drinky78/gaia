@@ -20,9 +20,9 @@ try {
     redirect('admin.corsi.crea&err='.CORSO_ERRORE_CORSO_NON_TROVATO);
 }
 
-if (!$c->modificabile()) {
-    redirect('formazione.corsi.riepilogo&id='.$id);
-}
+//if (!$c->modificabile()) {
+//    redirect('formazione.corsi.riepilogo&id='.$id);
+//}
 
 // calcola il numero massimo di docenti per il corso
 $maxAffiancamenti = $c->numeroDocentiPotenziali() * max(1, intval($c->tipo()->proporzioneAffiancamento));
