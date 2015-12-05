@@ -10,7 +10,7 @@ if (isset($_GET['t'])) {
 }
 $titoli = $conf['Corsi'][$t];
 
-$province = Utility::elencoProvincie();
+$province = Utility::elencoProvince();
 //$tipologie = Corso::getAllCertificati();
 $tipologie = TipoCorso::elenco();
 
@@ -25,7 +25,7 @@ paginaPrivata();
     <div class="span9">
         <h2>
              <i class="icon-calendar muted" id="icona-caricamento"></i>
-            Calendario delle attività
+            Calendario corsi
         </h2>
 
         <div class="row-fluid" id="calendario" style="margin-top: 50px"></div>
