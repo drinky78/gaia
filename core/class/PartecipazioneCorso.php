@@ -86,7 +86,7 @@ class PartecipazioneCorso extends Entita {
         $m->_HOSTNAME = filter_input(INPUT_SERVER, "SERVER_NAME");
         $m->_CORSO = $c->nome();
         $m->_RUOLO = $ruolo;
-        $m->_DATA = $c->inizio();
+        $m->_DATA = $c->inizio()->inTesto();
         $m->_ID = $this->id;
         $m->_MD5 = $this->md5;
         $m->invia();
@@ -202,7 +202,7 @@ class PartecipazioneCorso extends Entita {
         $m->_NOME = $this->volontario()->nomeCompleto();
         $m->_HOSTNAME = filter_input(INPUT_SERVER, "SERVER_NAME");
         $m->_CORSO = $c->nome();
-        $m->_DATA = $c->inizio();
+        $m->_DATA = $c->inizio()->inTesto();
         $m->_ID = $this->id;
         $m->_MD5 = $this->md5;
         
