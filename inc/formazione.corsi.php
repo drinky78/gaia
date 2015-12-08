@@ -8,7 +8,7 @@ paginaPrivata();
 
 $mieiComitati = $me->comitatiApp([APP_PRESIDENTE], false);
 
-$province = Utility::elencoProvincie();
+$province = Utility::elencoProvince();
 //$tipologie = Corso::getAllCertificati();
 $tipologie = TipoCorso::elenco();
 ?>
@@ -44,7 +44,7 @@ $tipologie = TipoCorso::elenco();
 
                 <div class="row-fluid">
                     <div class="span6">
-                        <label for="provincia">Comitato</label>
+                        <label for="provincia">Provincia</label>
                         <select id="provincia" data-placeholder="Scegli una provincia..." id="cercaProvicia" class="chosen-select" style="width: 350px;" multiple="true">
                             <option></option>
                             <?php  foreach($province as $tmp) :?>

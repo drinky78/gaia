@@ -202,13 +202,21 @@ class Corso extends GeoEntita {
     public function responsabile() {
     	return Volontario::id($this->responsabile);
     }
-
+    
+    /**
+     * Ritorna la data da stampare
+     * @return string
+     */
+    public function data(){
+        return  date("d/m/Y H:i:s", $this->inizio);
+    }
+    
     /**
      * Ritorna la data di inizio del corso base
      * @return DT
      */
     public function inizio() {
-    	return DT::daTimestamp($this->inizio);
+      	return DT::daTimestamp($this->inizio);
     }
 
     /**
@@ -821,7 +829,7 @@ class Corso extends GeoEntita {
         $comitato = $this->organizzatore();
         //$tipo = TipoCorso::id($this->tipo);
        
-        $m = new Email("crs/inviaCreazioneCorso", "Corso Creato");
+        $m = new Email("crs/corso/creazione", "Corso Creato");
         $a = $comitato->regionale()->email;
 
         if (empty($email)){
@@ -831,18 +839,13 @@ class Corso extends GeoEntita {
         //$m->a = $aut->partecipazione()->volontario();
         //$m->da = "pizar79@gmail.com";
         // $m->a = $comitato;
-        /*
+        
         $m->_COMITATO     = maiuscolo($comitato);
-        $m->_CF           = $iscritto->codiceFiscale;
-        $m->_CORSO        = $tipo->nome;
+        $m->_CORSO        = $this->nome();
         //$m->_SERIALE    = $risultato->seriale;
-        $m->_VOLONTARIO   = $iscritto->nomeCompleto();
-        $m->_DATAESAME    = date('d/m/Y', $this->tEsame);
-        $m->_DATA         = date('d/m/Y', time());
-        $m->_LUOGO        = $this->organizzatore()->comune;
-        $m->_VOLON        = $sesso;
-         * 
-         */
+        $m->_DATA         = $this->data();
+        $m->_LUOGO        = $this->luogo;
+        
         $m->invia(true);
         
         return ;

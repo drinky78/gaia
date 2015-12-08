@@ -12,6 +12,15 @@ class PartecipazioneCorso extends Entita {
 
     use EntitaCache;
 
+    public function ruolo(){
+        global $conf;
+        $ruolo = $conf['corso_ruolo'][intval($this->ruolo)];
+        return $ruolo;
+    }
+    
+    public function corso(){
+        return Corso::id($this->corso);
+    }
     
     public function volontario() {
         return Volontario::id($this->volontario);
@@ -27,7 +36,7 @@ class PartecipazioneCorso extends Entita {
         }
 
         try {
-            $c = Corso::id($this->corso);
+            $c =$this->corso();
         } catch(Exception $e) {
             return false;
         }
@@ -57,25 +66,32 @@ class PartecipazioneCorso extends Entita {
         $this->md5 = PartecipazioneCorso::md5($this->id);
         $this->timestamp = (new DT())->getTimestamp();
         
-        $this->inviaInvito($c);
+        $this->inviaInvito();
         return true;
     }
     
+    /**
+     * 
+     */
+    public function getDestinatariInvito(){
+        $list = array();
+        array_push($list, $this->volontario());
+        return $list;
+    }
     
-     /**
+    /**
      * Genera attestato, sulla base del corso e del volontario
      * @return PDF 
      */
-    public function inviaInvito(Corso $c) {
-        $m = new Email('crs/invitoDocente', "Invito ".$this->id);
+    public function inviaInvito() {
+        $m = new Email('crs/inviti/invito', "Invito ".$this->id);
 
-        $m->a = $this->volontario();
-        //$m->da = "pizar79@gmail.com";
-        //$m->a = $this->direttore();
+        $m->a = $this->getDestinatariInvito();
         $m->_NOME = $this->volontario()->nomeCompleto();
         $m->_HOSTNAME = filter_input(INPUT_SERVER, "SERVER_NAME");
-        $m->_CORSO = $c->nome();
-        $m->_DATA = $c->inizio();
+        $m->_CORSO = $this->corso()->nome();
+        $m->_RUOLO = $this->ruolo();
+        $m->_DATA = $this->corso()->data();
         $m->_ID = $this->id;
         $m->_MD5 = $this->md5;
         $m->invia();
@@ -128,7 +144,6 @@ class PartecipazioneCorso extends Entita {
         }
         
         // mettere corso in stato pending
-            
         if (!empty($motivo)) {
             $this->note = $this->note .' Partecipazione ritirata dal presidente/delegato: "'.$motivo.'".';
         }
@@ -145,6 +160,7 @@ class PartecipazioneCorso extends Entita {
     public function nega(String $motivo) {
         global $sessione;
 
+        
         if ($this->stato != PARTECIPAZIONE_RICHIESTA) {
             return false;
         }
@@ -160,8 +176,43 @@ class PartecipazioneCorso extends Entita {
         if ( !empty($motivo) ) {
             $this->note = $this->note .' Partecipazione negata dal volontario: "'.$motivo.'".';
         }
+        
+        $this->inviaRifiuto();
+        
         $this->stato = PARTECIPAZIONE_NEGATA;
         return true;
+    }
+    
+    /**
+     * 
+     */
+    public function getDestinatariRifiuto(){
+        $list = array();
+        
+        array_push($list, $this->corso()->responsabile());
+        array_push($list, $this->corso()->organizzatore());
+        
+        return $list;
+    }
+    
+    /**
+     * Invia la notifica di accettazione 
+     */
+    public function inviaRifiuto(){
+        
+         $m = new Email('crs/inviti/rifiuta', "Invito ".$this->id);
+
+        $m->a = $this->getDestinatariRifiuto();
+
+        $m->_NOME = $this->volontario()->nomeCompleto();
+        $m->_HOSTNAME = filter_input(INPUT_SERVER, "SERVER_NAME");
+        $m->_CORSO = $this->corso()->nome();
+        $m->_RUOLO = $this->ruolo();
+        $m->_DATA = $this->corso()->data();
+        $m->_ID = $this->id;
+        $m->_MD5 = $this->md5;
+        
+        return $m->invia();
     }
     
     
@@ -171,6 +222,7 @@ class PartecipazioneCorso extends Entita {
      */
     public function accetta($md5 = null) {
         global $sessione;
+
         if ($this->stato != PARTECIPAZIONE_RICHIESTA) {
             return false;
         }
@@ -182,12 +234,43 @@ class PartecipazioneCorso extends Entita {
         if ($sessione->utente()->id != $this->volontario && $this->md5 != $md5) {
             return false;
         }
-
+   
+        $this->inviaAccettazione();
+        
         $this->tConferma = time();
         $this->stato = PARTECIPAZIONE_ACCETTATA;
         return true;
     }
     
+    /**
+     * 
+     */
+    public function getDestinatariAccettazione(){
+        $list = array();
+        
+        array_push($list, $this->corso()->responsabile());
+        array_push($list, $this->corso()->organizzatore());
+        
+        return $list;
+    }
+    
+    /**
+     * Invia la notifica di accettazione 
+     */
+    public function inviaAccettazione(){
+        $m = new Email('crs/inviti/accetta', "Invito ".$this->id);
+
+        $m->a = $this->getDestinatariAccettazione();
+        $m->_NOME = $this->volontario()->nomeCompleto();
+        $m->_HOSTNAME = filter_input(INPUT_SERVER, "SERVER_NAME");
+        $m->_CORSO = $this->corso()->nome();
+        $m->_RUOLO = $this->ruolo();
+        $m->_DATA = $this->corso()->data();
+        $m->_ID = $this->id;
+        $m->_MD5 = $this->md5;
+        
+        return $m->invia();
+    }
     
     /**
      * Annulla la conferma di presenza, generalmente per motivi imprevisti

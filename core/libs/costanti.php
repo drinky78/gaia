@@ -983,6 +983,7 @@ define('CORSO_VALIDAZIONE_NESSUN_PARTECIPANTE',              8);
 define('CORSO_VALIDAZIONE_TROPPI_PARTECIPANTI',             16);
 define('CORSO_VALIDAZIONE_ERRATO_NUMERO_DOCENTI',           32);
 define('CORSO_VALIDAZIONE_TROPPI_AFFIANCAMENTI',            64);
+define('CORSO_VALIDAZIONE_POCHI_PARTECIPANTI',              128);
 
 $conf['validazione_corsi'] = [
     CORSO_VALIDAZIONE_ORGANIZZATORE_MANCANTE    =>  'Manca un organizzatore',

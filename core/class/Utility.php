@@ -41,6 +41,8 @@ class Utility {
                     SELECT valore FROM datiProvinciali WHERE nome = :attributo
                     UNION
                     SELECT valore FROM datiRegionali WHERE nome = :attributo
+                    UNION 
+                    SELECT valore FROM datiLocali WHERE nome = :attributo
                 ) AS tutte_le_provincie
             WHERE valore != ''
                 ORDER BY valore ASC;
@@ -57,7 +59,7 @@ class Utility {
     /**
      * Prendo l'elenco delle province dai dati di dettaglio dei comitati
      */
-    public static function elencoProvincie() {
+    public static function elencoProvince() {
         $list = Utility::elencoByAttributoDiComitato("provincia");
         return $list;
     }
