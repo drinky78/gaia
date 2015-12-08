@@ -14,11 +14,9 @@ if ($part->md5 != $md5){
     header('HTTP/1.0 403 Forbidden');
     redirect("errore.403");
     exit(0);
-} ?>
-  
-<?php var_dump($part); ?>
-
-
+}
+?>
+ 
 <form id="invitoRisposta" action="?" method="get">
     <ul>
         <li><input name="response" type="radio" value="1" data-url="formazione.corsi.invito.ok" />Accetta</li>

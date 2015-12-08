@@ -202,13 +202,21 @@ class Corso extends GeoEntita {
     public function responsabile() {
     	return Volontario::id($this->responsabile);
     }
-
+    
+    /**
+     * Ritorna la data da stampare
+     * @return string
+     */
+    public function data(){
+        return  date("d/m/Y H:i:s", $this->inizio);
+    }
+    
     /**
      * Ritorna la data di inizio del corso base
      * @return DT
      */
     public function inizio() {
-    	return DT::daTimestamp($this->inizio);
+      	return DT::daTimestamp($this->inizio);
     }
 
     /**
