@@ -331,4 +331,76 @@ class PartecipazioneCorso extends Entita {
         $this->stato = PARTECIPAZIONE_CONFERMATA;
         return true;
     }
+    
+    /**
+     * 
+     * 
+     * @global type $db
+     * @global type $conf
+     * @param type $ruoli
+     * @param type $limiteGiorni
+     * @return \Volontario
+     */
+    public static function inattiviPerRuolo($ruoli, $limiteGiorni) {
+        global $db, $conf;
+ 
+        $lista = array();
+        for($i = 0; $i < sizeof($ruoli); $i++){
+            array_push($lista, ":ruolo_{$i}");
+        }
+        $inQuery = implode(",", $lista);
+        
+        /*
+         * 
+         * 
+         * QUERY CON QUALIFICHE E RUOLI
+         
+         * 
+         * 
+         */
+        
+        $sql  = "SELECT p.volontario AS id, group_concat(q.nome) AS qualifiche, group_concat(p.ruolo) AS ruoli ";
+        $sql .= " FROM " . static::$_t . " p, crs_corsi c, crs_tipoCorsi t, crs_qualifiche q ";
+        $sql .= " WHERE t.qualifica = q.id AND";
+        $sql .= " t.id = c.tipo AND p.corso = c.id AND p.ruolo IN ({$inQuery})";
+        $sql .= " AND DATEDIFF(now(), FROM_UNIXTIME(c.inizio)) > :giorni";
+        $sql .= " GROUP BY p.volontario";
+        
+                /*
+        $sql  = "SELECT DISTINCT p.volontario AS id FROM " . static::$_t . " p, crs_corsi c";
+        $sql .= " WHERE  p.corso = c.id ";
+        $sql .= " AND DATEDIFF(now(), from_unixtime(c.inizio)) > :giorni";
+        $sql .= " AND p.ruolo IN ({$inQuery})";
+        */
+        $query = $db->prepare($sql);
+        $query->bindParam(':giorni', $limiteGiorni);
+        for($i = 0; $i < sizeof($ruoli); $i++){
+            $query->bindParam(":ruolo_{$i}", $ruoli[$i]);
+        }
+        
+        $query->execute();
+       
+        
+        $lista = array();
+        while ( $riga = $query->fetch(PDO::FETCH_ASSOC) ) {
+            $id = $riga['id'];
+            
+            
+            $qualifiche = $riga['qualifiche'];
+            $ruoli = $riga['ruoli'];
+            $tmp =  new Volontario($id);
+            foreach(explode(",", $qualifiche) as $q){
+                $tmp->aggiungiQualifica($q);
+            }
+            foreach(explode(",", $ruoli) as $r){
+                $tmp->aggiungiRuolo($r);
+            }
+            
+            array_push($lista, $tmp);
+            
+        }
+        
+        return $lista;
+    }
+
 }
