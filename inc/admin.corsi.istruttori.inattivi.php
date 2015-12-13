@@ -4,7 +4,7 @@
  * ©2013 Croce Rossa Italiana
  */
 
-paginaAdmin();
+//paginaAdmin();
 
 global $conf;
 

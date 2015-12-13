@@ -351,27 +351,20 @@ class PartecipazioneCorso extends Entita {
         $inQuery = implode(",", $lista);
         
         /*
-         * 
-         * 
          * QUERY CON QUALIFICHE E RUOLI
-         
-         * 
-         * 
          */
         
         $sql  = "SELECT p.volontario AS id, group_concat(q.nome) AS qualifiche, group_concat(p.ruolo) AS ruoli ";
         $sql .= " FROM " . static::$_t . " p, crs_corsi c, crs_tipoCorsi t, crs_qualifiche q ";
-        $sql .= " WHERE t.qualifica = q.id AND";
-        $sql .= " t.id = c.tipo AND p.corso = c.id AND p.ruolo IN ({$inQuery})";
-        $sql .= " AND DATEDIFF(now(), FROM_UNIXTIME(c.inizio)) > :giorni";
+        $sql .= "   WHERE t.qualifica = q.id AND t.id = c.tipo AND p.corso = c.id AND p.ruolo IN ({$inQuery})";
+        $sql .= "       AND DATEDIFF(now(), FROM_UNIXTIME(c.inizio)) > :giorni";
+        $sql .= "       AND p.volontario NOT IN (";
+        $sql .= "           SELECT p.volontario AS id ";
+        $sql .= "               FROM " . static::$_t . " p, crs_corsi c, crs_tipoCorsi t, crs_qualifiche q ";
+        $sql .= "               WHERE t.qualifica = q.id AND t.id = c.tipo AND p.corso = c.id AND p.ruolo IN ({$inQuery})";
+        $sql .= "                   AND DATEDIFF(now(), FROM_UNIXTIME(c.inizio)) <= :giorni )";
         $sql .= " GROUP BY p.volontario";
         
-                /*
-        $sql  = "SELECT DISTINCT p.volontario AS id FROM " . static::$_t . " p, crs_corsi c";
-        $sql .= " WHERE  p.corso = c.id ";
-        $sql .= " AND DATEDIFF(now(), from_unixtime(c.inizio)) > :giorni";
-        $sql .= " AND p.ruolo IN ({$inQuery})";
-        */
         $query = $db->prepare($sql);
         $query->bindParam(':giorni', $limiteGiorni);
         for($i = 0; $i < sizeof($ruoli); $i++){
@@ -381,7 +374,7 @@ class PartecipazioneCorso extends Entita {
         $query->execute();
        
         
-        $lista = array();
+        $risultati = array();
         while ( $riga = $query->fetch(PDO::FETCH_ASSOC) ) {
             $id = $riga['id'];
             
@@ -396,11 +389,10 @@ class PartecipazioneCorso extends Entita {
                 $tmp->aggiungiRuolo($r);
             }
             
-            array_push($lista, $tmp);
-            
+            array_push($risultati, $tmp);
         }
         
-        return $lista;
+        return $risultati;
     }
 
 }
