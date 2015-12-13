@@ -394,5 +394,81 @@ class PartecipazioneCorso extends Entita {
         
         return $risultati;
     }
+    
+    
+    /**
+     * 
+     * 
+     * @global type $db
+     * @global type $conf
+     * @param type $ruoli
+     * @param type $limiteGiorni
+     * @return \Volontario
+     */
+    public static function istruttoriPotenziali() {
+        global $db, $conf;
+ 
+        $ruoli = array(CORSO_RUOLO_AFFIANCAMENTO);
+        $limiteGiorni = 365;
+        
+        
+        $lista = array();
+        for($i = 0; $i < sizeof($ruoli); $i++){
+            array_push($lista, ":ruolo_{$i}");
+        }
+        $inQuery = implode(",", $lista);
+        
+        /*
+         * QUERY CON QUALIFICHE E RUOLI
+         */
+        
+        $sql  = "SELECT 
+            p.volontario
+        FROM
+            crs_partecipazioni_corsi p,
+            crs_corsi c,
+            crs_tipoCorsi t,
+            crs_ruoli r,
+            crs_qualifiche q
+        WHERE
+			r.id = t.ruoloAttestato AND 
+            t.qualifica = q.id AND t.id = c.tipo
+                AND p.corso = c.id
+                AND r.id = 6
+                AND DATEDIFF(NOW(), FROM_UNIXTIME(c.inizio)) <= 365
+			AND p.volontario NOT IN (
+				SELECT volontario FROM crs_titoliCorsi tc, crs_tipoCorsi t 
+					WHERE tc.titolo = t.id AND t.ruoloAttestato = 4
+            )";
+        
+        $query = $db->prepare($sql);
+        $query->bindParam(':giorni', $limiteGiorni);
+        for($i = 0; $i < sizeof($ruoli); $i++){
+            $query->bindParam(":ruolo_{$i}", $ruoli[$i]);
+        }
+        
+        $query->execute();
+       
+        
+        $risultati = array();
+        while ( $riga = $query->fetch(PDO::FETCH_ASSOC) ) {
+            $id = $riga['id'];
+            
+            
+            $qualifiche = $riga['qualifiche'];
+            $ruoli = $riga['ruoli'];
+            $tmp =  new Volontario($id);
+            foreach(explode(",", $qualifiche) as $q){
+                $tmp->aggiungiQualifica($q);
+            }
+            foreach(explode(",", $ruoli) as $r){
+                $tmp->aggiungiRuolo($r);
+            }
+            
+            array_push($risultati, $tmp);
+        }
+        
+        return $risultati;
+    }
 
 }

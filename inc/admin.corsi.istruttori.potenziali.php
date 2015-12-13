@@ -6,15 +6,8 @@
 
 paginaAdmin();
 
-global $conf;
-
-$ruoli = array(CORSO_RUOLO_DOCENTE, CORSO_RUOLO_AFFIANCAMENTO, CORSO_RUOLO_DIRETTORE);
-$giorni = 90;
-
-$persone = PartecipazioneCorso::inattiviPerRuolo($ruoli, $giorni);
-               
-
-?>
+$persone = PartecipazioneCorso::istruttoriPotenziali();
+               ?>
 
 <script type="text/javascript"><?php require './assets/js/presidente.utenti.js'; ?></script>
 <br/>
@@ -22,7 +15,7 @@ $persone = PartecipazioneCorso::inattiviPerRuolo($ruoli, $giorni);
     <div class="span8">
         <h2>
             <i class="icon-certificate muted"></i>
-            Istruttori Inattivi 
+            Istruttori Potenziali 
         </h2>
     </div>
     
