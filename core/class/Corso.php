@@ -1287,5 +1287,9 @@ class Corso extends GeoEntita {
         
         return $contatore;
     }
+
+    public static function bloccaCorsi() {
+       // da imp 
+    }
     
 }
