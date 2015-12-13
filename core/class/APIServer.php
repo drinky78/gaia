@@ -688,6 +688,7 @@ class APIServer {
             'anagrafica.cognome     ASC',
             'anagrafica.nome        ASC'
         ];
+        
         /*
         if ( 
             $this->par['ordine'] &&
@@ -751,7 +752,10 @@ class APIServer {
             }
         }
         
-       
+        $crs_data = $this->par['data'];
+        if (!empty($crs_data)){
+            $r->crs_data = intval($crs_data);
+        }
         
         // versione modificata per #867
         if ($this->par['comitati']) {

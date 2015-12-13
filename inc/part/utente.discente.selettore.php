@@ -20,6 +20,7 @@ if (!isset($maxDiscenti)) {
         var value;
         var element = $(".chosen-select.discenti");
         var ruolo = element.data("ruolo");
+        var data = $(".chosen-select").data("date");
         var qualifica = element.data("qualifica");
         var comitato = element.data("comitato");
         
@@ -47,7 +48,7 @@ if (!isset($maxDiscenti)) {
                     return;
                 }
                                 
-                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreDiscente', comitati: comitato, stato_discente: stato_discente, ruolo: ruolo, qualifica: qualifica}, function (x) {
+                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreDiscente', comitati: comitato, stato_discente: stato_discente, data: data, ruolo: ruolo, qualifica: qualifica}, function (x) {
                     select.children().remove('option:not(:selected)');
                         if (x.risposta.risultati.length) {
                     for (var i in x.risposta.risultati) {

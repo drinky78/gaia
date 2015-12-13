@@ -18,6 +18,7 @@ if (isset($direttori) && is_array($direttori) && !empty($direttori)) {
         var element = $(".chosen-select.direttori");
         var ruolo = element.data("ruolo");
         var qualifica = element.data("qualifica");
+        var data = $(".chosen-select").data("date");
         //var comitato = element.data("comitato");
         
         var select = $(".chosen-select.direttori");
@@ -44,7 +45,7 @@ if (isset($direttori) && is_array($direttori) && !empty($direttori)) {
                         return;
                     }
 
-                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreDirettore', stato_docente: stato_direttore, ruolo: ruolo, qualifica: qualifica}, function (x) {
+                    api('corsi:volontari:cerca', {query: value, perPagina: 80, ordine: 'selettoreDirettore', stato_docente: stato_direttore, ruolo: ruolo, data: data, qualifica: qualifica}, function (x) {
                         select.children().remove('option:not(:selected)');
                         if (x.risposta.risultati.length) {
                             for (var i in x.risposta.risultati) {

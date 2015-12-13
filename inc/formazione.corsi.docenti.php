@@ -75,6 +75,7 @@ $d = new DateTime('@' . $c->inizio);
                                 data-ruolo="<?php echo $ruolo; ?>"
                                 data-qualifica="<?php echo $qualifica; ?>"
                                 data-comitato="<?php echo $c->organizzatore;?>"
+                                data-date="<?php echo $c->inizio ?>"
                                 data-placeholder="Scegli un docente..." multiple class="chosen-select docenti">
                             <?php 
                                 foreach ($docenti as $i ) {

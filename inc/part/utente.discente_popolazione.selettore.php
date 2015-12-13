@@ -17,6 +17,8 @@ if (isset($discenti) && is_array($discenti) && !empty($discenti)) {
         var value;
         var ruolo = $(".chosen-select").data("ruolo");
         var qualifica = $(".chosen-select").data("qualifica");
+        
+        
         chs = $(".chosen-select")
             .chosen({
                 max_selected_options: <?php echo $maxDiscenti ?>, 
