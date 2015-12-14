@@ -26,6 +26,7 @@ $(document).ready(function () {
                 }
                 
                 if (x.risposta && x.risposta.codiceFiscale) {
+                    alert('Civile aggiunto con successo. E\' ora possibile cercare il civile tra i discenti.');
                     $('#nuovo-utente').modal('hide');
 //                    $('.chosen-select.discenti').each(function(idx, el) {
 //                        $(el).append('<option value="'+x.risposta.id+'">'+x.risposta.nomeCompleto+'</option>');
