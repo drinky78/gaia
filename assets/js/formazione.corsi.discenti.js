@@ -26,10 +26,10 @@ $(document).ready(function () {
                 }
                 
                 if (x.risposta && x.risposta.codiceFiscale) {
-                    $('#nuova-persona').modal('hide');
-                    $('.chosen-select.discenti').each(function(el) {
-                        el.append('<option value="'+id+'">'+x.risposta.nomeCompleto+'</option>');
-                    });
+                    $('#nuovo-utente').modal('hide');
+//                    $('.chosen-select.discenti').each(function(idx, el) {
+//                        $(el).append('<option value="'+x.risposta.id+'">'+x.risposta.nomeCompleto+'</option>');
+//                    });
                 }
             }
         );
