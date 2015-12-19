@@ -17,7 +17,7 @@ $luogo = ($_POST['luogo']);
 $tipocorsoId = (int) intval($_POST['tipo']);
 
 
-$comitato = Comitato::id($organizzatore)->oid();
+$comitato = Comitato::id($organizzatore);
 
 $inizio = DT::createFromFormat('d/m/Y H:i', $_POST['inizio']);
 
@@ -35,7 +35,7 @@ if (empty($_POST['id'])) {
 }
 
 $c->tipo = $tipocorsoId;
-$c->organizzatore = $comitato;
+$c->organizzatore = $comitato->oid();
 $c->responsabile = $me->id;
 $c->luogo = $luogo;
 $c->inizio = $inizio->getTimeStamp();

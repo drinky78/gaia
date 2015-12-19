@@ -111,7 +111,7 @@ class Corso extends GeoEntita {
                 break;
             case CORSO_S_DACOMPLETARE:
                 $tipo = $this->tipo ();
-                
+
                 $var = $this->organizzatore;
                 if (empty($var)) {
                     $err |= CORSO_VALIDAZIONE_ORGANIZZATORE_MANCANTE;
@@ -135,7 +135,7 @@ class Corso extends GeoEntita {
                 if ($var < $tipo->minimoPartecipanti) {
                     $err |= CORSO_VALIDAZIONE_POCHI_PARTECIPANTI;
                 }
-                if ($this->numeroDocentiNecessari() != $this->numeroDocenti()) {
+                if ($this->numeroDocentiNecessari() > $this->numeroDocenti()) {
                     $err |= CORSO_VALIDAZIONE_ERRATO_NUMERO_DOCENTI;
                 }
                 
@@ -1061,7 +1061,6 @@ class Corso extends GeoEntita {
      * @param Volontario $me    volontario loggato
      * @return array            Array di oggetti
      */
-
     public static function ricerca($_array, $_order = null, Volontario $me = null) {
         global $db, $conf, $cache;
 
@@ -1177,6 +1176,54 @@ class Corso extends GeoEntita {
         return $t;
     }
     
+    
+    public static function ultimoCorsoPassato(Volontario $volontario, $tipo) {
+        global $db, $conf, $cache;
+
+        if ( false && $cache && static::$_versione == -1 ) {
+            static::_caricaVersione();            
+        }
+
+        $sql = "SELECT c.id
+            FROM crs_partecipazioni_corsi p
+            JOIN crs_corsi c
+        	ON p.corso=c.id
+            LEFT JOIN crs_risultati_corsi r
+                ON p.corso=r.corso and p.volontario=r.volontario
+            WHERE p.volontario = :volontario
+            AND p.ruolo = ".CORSO_RUOLO_DISCENTE."
+            AND c.tipo = :tipo                
+            AND r.idoneita = ".CORSO_RISULTATO_IDONEO."
+            ORDER BY timestamp DESC
+            LIMIT 0,1
+        ";
+        
+        $hash = null;
+        if ( false && $cache && static::$_cacheable ) {
+            $hash = md5($sql);
+            $r = static::_ottieniQuery($hash);
+            if ( $r !== false  ) {
+                $cache->incr( chiave('__re') );
+                return $r;
+            }
+        }
+        
+        $query = $db->prepare($sql);
+        
+        $query->bindParam(":volontario", $volontario->id, PDO::PARAM_INT) ;
+        $query->bindParam(":tipo", intval($tipo), PDO::PARAM_INT) ;
+        
+        $t = $c = [];
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        
+        if (!empty($row['id'])) {
+            return Corso::id($row['id']);
+        } else {
+            return null;
+        }
+    }
+
+    
     /**
      * 
      * @global type $db
@@ -1232,17 +1279,119 @@ class Corso extends GeoEntita {
         
         $contatore = 0;
         
-        
-        
-        
         $verbale = array();
         $verbale["progressivo"] = "001/2015";
         $verbale["data"] = "xx/xx/2015";
         
         foreach($risultati as $risultato){
             $volontario = $risultato->volontario();
+            
+var_dump($risultato);
+            // affiancamenti == -1 è una convenzione per determinare che il risultato 
+            // è relativo ad un affiancamento (vedi formazione.corsi.risultati.ok.php)
+            if ($risultato->affiancamenti == -1) {
+                // recupera qualifica e ruolo per un docente in affiancamento
+                $qualifica = $this->tipo()->qualifica;
+var_dump($qualifica); #1
+                $ruoloAffiancamento = $this->tipo()->ruoloAffiancamento;
+var_dump($ruoloAffiancamento);
+                // è necessario cercare l'ultimo corso in cui il docente in affiancamento 
+                // ha conseguito il titolo di "docente in affiancamento",
+                // pertanto si cerca prima il tipo di corso e poi i titoli conseguiti per quel tipo di corso
+                $tipoCorsoIstruttore = TipoCorso::filtra([
+                    ['qualifica', $qualifica],
+                    ['ruoloAttestato', $ruoloAffiancamento]
+                ]);
+                
+                if (empty($tipoCorsoIstruttore)) {
+                    // DEVE RESTITUIRE UN ERRORE
+                    break;
+                }
+                
+                $tipoCorsoIstruttore = $tipoCorsoIstruttore[0];
+var_dump($tipoCorsoIstruttore); # null
+                
+                $titoloCorsoIstruttore = TitoloCorso::filtra([
+                    ['volontario', $volontario->id],
+                    ['titolo', $tipoCorsoIstruttore->id]
+                ]);
+                
+                if (empty($titoloCorsoIstruttore)) {
+                    // DEVE RESTITUIRE UN ERRORE
+                    break;
+                }
+                
+var_dump($titoloCorsoIstruttore); # null
 
-            if ($risultato->idoneita == CORSO_RISULTATO_IDONEO && !empty($volontario)){
+                // ricerca del risultato del corso istruttori con il quale ha conseguito il titolo di potenziale istruttore/formatore
+                $risultatoCorsoIstruttore = RisultatoCorso::filtra([
+                    ['volontario', $volontario->id],
+                    ['corso', $titoloCorsoIstruttore->corso]
+                ]);
+                
+                if (empty($risultatoCorsoIstruttore)) {
+                    // DEVE RESTITUIRE UN ERRORE
+                    break;
+                }
+                
+                $risultatoCorsoIstruttore = $risultatoCorsoIstruttore[0];
+
+                // il numero di affiancamenti previsti dal corso istruttori.
+                $affiancamentiPrevisti = $risultatoCorsoIstruttore->affiancamenti;
+                
+                // quindi se c'è un titolo, cerca gli affiancamenti positivi che seguono nel tempo quel titolo 
+                $affiancamentiPositivi = RisultatoCorso::conta([
+                    ['volontario', $volontario->id],
+                    ['affiancamenti', -1],
+                    ['idoneita', CORSO_RISULTATO_IDONEO],
+                    ['timestamp', $titoloCorsoIstruttore->inizio, OP_GT]
+                ]);
+                
+                // quindi se c'è un titolo, cerca gli affiancamenti positivi che seguono nel tempo quel titolo 
+                $affiancamentiNegativi = RisultatoCorso::conta([
+                    ['volontario', $volontario->id],
+                    ['affiancamenti', -1],
+                    ['idoneita', CORSO_RISULTATO_NON_IDONEO],
+                    ['timestamp', $titoloCorsoIstruttore->inizio, OP_GT]
+                ]);
+                
+                // Nel caso il numero di affiancamenti falliti sia eccessivo ( due )
+                // boccia il volontario e assegna la penalità
+                if ($affiancamentiNegativi >= 2) {
+//                    BOCCIATURA: DA TERMINARE
+                }
+                
+                // Nel caso il numero di affiancamenti con successo sia sufficiente,
+                // rilascia il certificato
+                if ($affiancamentiPositivi >= ($affiancamentiPrevisti-1)) {
+                    //GOAL
+                    
+                    $nuovoRuolo = $tipoCorsoIstruttore->ruoloAttestatoPostAffiancamenti;
+
+                    $risultato->generaSeriale(intval(date("Y", $risultato->timestamp)), $this->tipo);
+                    $risultato = RisultatoCorso::id($risultato->id);
+
+                    $contatore++;
+                    $f = $this->generaAttestato($risultato, $volontario, $verbale);
+                    $risultato->file = $f->id;
+                    $risultato->generato = 1;
+
+                    $this->inviaAttestato($risultato, $volontario, $f);
+
+                    // Aggiunto il titolo al discente che ha superato il corso
+                    $titoloCorso = new TitoloCorso();
+                    $titoloCorso->volontario = $volontario->id;
+                    $titoloCorso->inizio = $risultato->timestamp;
+                    $titoloCorso->fine = intval($titoloCorso->inizio) + (60 * 60 * 24 * 365);
+                    $titoloCorso->titolo = $tipoCorsoIstruttore;
+                    $titoloCorso->codice = $risultato->seriale; 
+
+                }
+
+            }
+            
+            // generazione certificato per discente
+            if ($risultato->affiancamenti > -1 && $risultato->idoneita == CORSO_RISULTATO_IDONEO && !empty($volontario)){
                 
                 $risultato->generaSeriale(intval(date("Y", $risultato->timestamp)), $this->tipo);
                 $risultato = RisultatoCorso::id($risultato->id);
@@ -1264,7 +1413,7 @@ class Corso extends GeoEntita {
             }
             
         }
-        
+die('asd');
         // Verbale, generazione e invio
         $f = $this->generaVerbale($risultati);
         $this->verbale = $f->id;

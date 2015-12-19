@@ -22,6 +22,8 @@ $t->punizione = intval($_POST['inputPunizione']);
 $t->proporzioneIstruttori =  intval($_POST['inputProporzioneIstruttori']);
 
 $t->ruoloAttestato = $_POST['inputRuoloAttestato'];
+$t->ruoloAttestatoPostAffiancamenti = $_POST['inputRuoloAttestatoPostAffiancamenti'];
+
 $t->ruoloDirettore = $_POST['inputRuoloDirettore'];
 $t->ruoloDocenti = $_POST['inputRuoloDocenti'];
 $t->ruoloAffiancamento = $_POST['inputRuoloAffiancamento'];

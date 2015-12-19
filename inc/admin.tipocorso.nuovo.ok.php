@@ -21,6 +21,7 @@ if (!$x){
     $t->limitePerIscrizione = intval($_POST['inputLimitePerIscrizione']);
     $t->qualifica =  $_POST['inputAttestato'];
     $t->ruoloAttestato = $_POST['inputRuoloAttestato'];
+    $t->ruoloAttestatoPostAffiancamenti = $_POST['inputRuoloAttestatoPostAffiancamenti'];
     $t->proporzioneAffiancamento =  intval($_POST['inputProporzioneAffiancamento']);
     $t->punizione = intval($_POST['inputPunizione']);
     $t->proporzioneIstruttori =  intval($_POST['inputProporzioneIstruttori']);

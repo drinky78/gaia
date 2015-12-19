@@ -106,11 +106,8 @@ $d = new DateTime('@' . $c->inizio);
                             <label>Affiancamenti</label>
                             <select name="discAffiancamenti[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
                                 <option value="0">Nessuno</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
-                                <option value="5">5</option>
                             </select>
                         </div>
                         <div class="span5">
@@ -131,6 +128,7 @@ $d = new DateTime('@' . $c->inizio);
                         <div class="span3">
                             <label>Prova scritta</label>
                             <select name="discScritto[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                                <option value="">Non necessaria</option>
                                 <option value="100">100</option>
                                 <option value="90">90</option>
                                 <option value="80">80</option>
@@ -147,6 +145,7 @@ $d = new DateTime('@' . $c->inizio);
                         <div class="span3">
                             <label>Prova pratica</label>
                             <select name="discPratica[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                                <option value="">Non necessaria</option>
                                 <option value="100">100</option>
                                 <option value="90">90</option>
                                 <option value="80">80</option>
@@ -163,6 +162,7 @@ $d = new DateTime('@' . $c->inizio);
                         <div class="span3">
                             <label>Utilizzo presidio</label>
                             <select name="discPresidio[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                                <option value="">Non necessaria</option>
                                 <option value="100">100</option>
                                 <option value="90">90</option>
                                 <option value="80">80</option>

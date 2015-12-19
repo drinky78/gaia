@@ -14,7 +14,7 @@ try {
     if (empty($c)) {
         throw new Exception('Manomissione');
     }
-    $tipocorso = TipoCorso::id($c->tipo);
+    $tipoCorso = TipoCorso::id($c->tipo);
 
 } catch(Exception $e) {
     redirect('admin.corsi.crea&err='.CORSO_ERRORE_CORSO_NON_TROVATO);
@@ -25,7 +25,7 @@ try {
 //}
 
 // calcola il numero massimo di discenti per il corso
-$maxDiscenti = $c->numeroDocentiNecessari() * $tipocorso->proporzioneIstruttori;
+$maxDiscenti = $c->numeroDocentiNecessari() * $tipoCorso->proporzioneIstruttori;
 
 // recupera gli id di discenti già presenti per il corso
 // per popolare automaticamente la lista in caso di pagina di modifica
@@ -47,8 +47,8 @@ caricaSelettoreDiscente([
 $d = new DateTime('@' . $c->inizio);
 
 
-$ruolo = $tipocorso->ruoloDiscenti;
-$qualifica = $tipocorso->qualifica;
+$ruolo = $tipoCorso->ruoloDiscenti;
+$qualifica = $tipoCorso->qualifica;
         
 ?>
 <div class="row-fluid">

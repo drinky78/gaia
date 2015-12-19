@@ -200,7 +200,7 @@ $geoComitato = GeoPolitica::daOid($c->organizzatore);
                         Manca il direttore
                     </div>
                     <?php } ?>
-                    <?php if ($checkDocenti) { ?>
+                    <?php if ($checkDocenti>0) { ?>
                     <div>
                         <i class="icon-warning-sign"></i>
                         Mancano <?php echo $checkDocenti ?> docenti

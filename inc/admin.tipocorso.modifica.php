@@ -55,6 +55,38 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
     </div>
     
     <div class="control-group">
+        <label class="control-label" for="inputRuoloAttestatoPostAffiancamenti">Ruolo Attestato dopo Affiancamenti</label>
+        <div class="controls">
+            <select class="input-xxlarge" name="inputRuoloAttestatoPostAffiancamenti" id="inputRuoloAttestatoPostAffiancamenti">
+                <option></option>
+                <?php foreach($ruoli as $r) :?>
+                    <?php $selected = ""; ?>
+                    <?php if(intval($f->ruoloAttestatoPostAffiancamenti) === intval($r->id)):?>
+                        <?php $selected = "selected='selected'"; ?>
+                    <?php endif ?>
+                    <option value="<?php print intval($r->id) ?>" <?php print $selected; ?>><?php print $r->ruolo?></option>
+                <?php endforeach; ?>
+            </select> 
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="inputAttestato">Attestato</label>
+        <div class="controls">
+            <select class="input-xxlarge" name="inputAttestato" id="inputAttestato">
+                <option></option>
+                <?php foreach($qualifiche as $q) :?>
+                    <?php $selected = ""; ?>
+                    <?php if(intval($f->qualifica) === intval($q->id)):?>
+                        <?php $selected = "selected='selected'"; ?>
+                    <?php endif ?>
+                    <option value="<?php print intval($q->id) ?>" <?php print $selected; ?>><?php print $q->nome?></option>
+                <?php endforeach; ?>
+            </select> 
+        </div>
+    </div>
+    
+    <div class="control-group">
         <label class="control-label" for="inputMinimoPartecipanti">Numero discenti</label>
         <div class="controls">
             <span>minimo:</span>
@@ -119,22 +151,6 @@ $qualifiche = Qualifiche::elenco("Nome ASC");
         <label class="control-label" for="inputLimitePerIscrizione">Limite in giorni per l'iscrizione</label>
         <div class="controls">
             <input class="input-small" type="text" name="inputLimitePerIscrizione" id="inputLimitePerIscrizione" value="<?php echo $f->limitePerIscrizione; ?>">
-        </div>
-    </div>
-    
-    <div class="control-group">
-        <label class="control-label" for="inputAttestato">Attestato</label>
-        <div class="controls">
-            <select class="input-xxlarge" name="inputAttestato" id="inputAttestato">
-                <option></option>
-                <?php foreach($qualifiche as $q) :?>
-                    <?php $selected = ""; ?>
-                    <?php if(intval($f->qualifica) === intval($q->id)):?>
-                        <?php $selected = "selected='selected'"; ?>
-                    <?php endif ?>
-                    <option value="<?php print intval($q->id) ?>" <?php print $selected; ?>><?php print $q->nome?></option>
-                <?php endforeach; ?>
-            </select> 
         </div>
     </div>
     

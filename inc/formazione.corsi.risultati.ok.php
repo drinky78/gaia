@@ -18,12 +18,34 @@ $affiancamentiDisc = filter_input(INPUT_POST, 'discAffiancamenti', FILTER_DEFAUL
 $segnalazioniDisc = filter_input(INPUT_POST, 'discSegnalazioni', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
 
-//(var_dump($idoneita));
+
+//(var_dump($idoneitaAff));
 //(var_dump($affiancamenti));
 //(var_dump($segnalazioni));
 $c = null;
 try {
     $c = Corso::id(intval($_POST['id']));
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    
+//    $c->chiudi();
+//    die;
+//    
+    
+    
+    
+    
+    
+    
+    
+    
     
     // controllare che l'utente attuale sia il direttore del corso 
 
@@ -62,11 +84,14 @@ foreach ($idoneitaDisc as $volontario => $risultato) {
         )
         $err++;
 }
-foreach ($idoneitaAff as $volontario => $risultato) {
-    if ($risultato==CORSO_RISULTATO_NESSUNO ||
-        intval($volontario)<=0
-        )
-        $err++;
+
+if (!empty($idoneitaAff)) {
+    foreach ($idoneitaAff as $volontario => $risultato) {
+        if ($risultato==CORSO_RISULTATO_NESSUNO ||
+            intval($volontario)<=0
+            )
+            $err++;
+    }
 }
 if ($err) {
     redirect('formazione.corsi.risultati&id='.$c->id.'&err='.CORSO_ERRORE_RISULTATI_NON_COERENTI);
@@ -78,7 +103,7 @@ foreach ($idoneitaDisc as $volontario => $risultato) {
     $r->corso = $c->id;
     $r->volontario = intval($volontario);
     $r->idoneita = intval($risultato);
-    $r->affiancamenti = ($r->idoneita >= CORSO_RISULTATO_IDONEO) ? intval($affiancamenti[$volontario]) : 0;
+    $r->affiancamenti = ($r->idoneita >= CORSO_RISULTATO_IDONEO) ? intval($affiancamentiDisc[$volontario]) : 0;
     
     if (!empty($segnalazioniDisc[$volontario]) && is_array($segnalazioniDisc[$volontario])) {
 
@@ -94,32 +119,21 @@ foreach ($idoneitaDisc as $volontario => $risultato) {
     }
     $r->timestamp = $now->getTimestamp();
     $r->note = $r->note  . "\r\n\r\nProva scritta: ".@$scrittoDisc[$volontario].
-            "\r\n\r\nProva pratica: ".@$praticaDisc[$volontario].
-            "\r\n\r\nUtilizzo presidio: ".@$presidioDisc[$volontario].
-            "\r\n\r\n".@$noteDisc[$volontario];
+            "\r\nProva pratica: ".@$praticaDisc[$volontario].
+            "\r\nUtilizzo presidio: ".@$presidioDisc[$volontario].
+            "\r\n".@$noteDisc[$volontario];
 }
 
-foreach ($idoneitaAff as $volontario => $risultato) {
-    $r = new RisultatoCorso();
-    $r->corso = $c->id;
-    $r->volontario = intval($volontario);
-    $r->idoneita = intval($risultato);
-    $r->affiancamenti = ($r->idoneita >= CORSO_RISULTATO_IDONEO) ? intval($affiancamenti[$volontario]) : 0;
-    
-    if (!empty($segnalazioniDisc[$volontario]) && is_array($segnalazioniDisc[$volontario])) {
-
-        $size = sizeof($segnalazioniDisc[$volontario]);
-        for ($idx = 0; $idx < $size; ++$idx) {
-            
-            if (!in_array(intval($segnalazioniDisc[$volontario][$idx]), $idDocenti) ) {
-                throw new Exception('Manomissione');
-            }
-            
-            $r->{'segnalazione_0'.($idx+1)} = intval($segnalazioniDisc[$volontario][$idx]);
-        }
+if (!empty($idoneitaAff)) {
+    foreach ($idoneitaAff as $volontario => $risultato) {
+        $r = new RisultatoCorso();
+        $r->corso = $c->id;
+        $r->volontario = intval($volontario);
+        $r->idoneita = intval($risultato);
+        $r->affiancamenti = -1; // convenzione per determinare che si tratta di un affiancamento
+        $r->timestamp = $now->getTimestamp();
+        $r->note = $r->note  . "";
     }
-    $r->timestamp = $now->getTimestamp();
-    $r->note = $r->note  . "";
 }
 
 /*
