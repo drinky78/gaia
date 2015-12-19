@@ -21,8 +21,9 @@ class Ricerca {
         $giovane        = false,
         $infermiera     = false,
         $militare       = false,
-        $crs_ruolo      = "",
-        $crs_qualifica       = "",
+        $crs_ruolo      = NULL,
+        $crs_data       = NULL,
+        $crs_qualifica  = NULL,
         $ordine         = [
             'pertinenza             DESC',
             'comitati.nome          ASC',
@@ -158,6 +159,7 @@ class Ricerca {
         $popolazione = $this->popolazione;
         $qualifica = $this->crs_qualifica;
         $ruolo = $this->crs_ruolo;
+        $crs_data = $this->crs_data;
         $ora = (int) time();
 
        
@@ -277,10 +279,19 @@ class Ricerca {
                       OR crs_ruoli.id = crs_tipoCorsi.ruoloDiscenti
                       OR crs_ruoli.id = crs_tipoCorsi.ruoloAttestato
                   )
+                
                 AND     crs_qualifiche.id = crs_tipoCorsi.qualifica
                 AND     anagrafica.id = crs_titoliCorsi.volontario
                 AND     crs_corsi.tipo = crs_tipoCorsi.id";
         }
+        
+        if (!empty($crs_data)) {
+            $extraWhere .= " AND DATEDIFF(FROM_UNIXTIME(crs_titoliCorsi.fine), FROM_UNIXTIME({$crs_data})) > 0";
+            //$extraWhere .= " OR DATEDIFF(FROM_UNIXTIME(crs_titoliCorsi.fine), FROM_UNIXTIME({$crs_data})) < 0 )";
+            
+            //print $extraWhere;
+        }
+         
         $query = "
             SELECT
                 DISTINCT anagrafica.id

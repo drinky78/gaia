@@ -165,8 +165,20 @@ function cronjobGiornaliero()  {
         $log, $ok
     );
     
+    /**
+     * CRONJOB GIORNALIERI PER MODULO CORSI
+     */
+    cronjobEsegui(
+        "Blocco del corso dopo 10gg dal termine, avviso al comitato nazionale",
+        function() {
+            Corso::bloccaCorsi();
+            return true;
+        },
+        $log, $ok
+    );
+      
+        
     return $ok;
-    
 };
 // =========== FINE CRONJOB GIORNALIERO
 
@@ -327,6 +339,38 @@ function cronjobSettimanale() {
         },
         $log, $ok
     );
+        
+        
+    /**
+     * CRONJOB GIORNALIERI PER MODULO CORSI
+     */
+    cronjobEsegui(
+       "Invio email dopo 4 mesi dalla nomina",
+        function() use ($db) {
+            $n = $c = 0;
+            $query = "SELECT volontario, t.nome AS titolo, c.fine FROM crs_titoliCorsi c, crs_tipoCorsi t  "
+                . " WHERE t.id = c.titolo "
+                . " AND DATEDIFF(now(), FROM_UNIXTIME(c.inizio)) > 120 "
+                . " AND DATEDIFF(now(), FROM_UNIXTIME(c.inizio)) < 365";
+            
+            $query = $db->query($query);
+            while ( $r = $query->fetch(PDO::FETCH_NUM) ) {
+                $u = Utente::id($r[0]);
+                $titolo = $r[1];
+                $dataFine = DT::daTimestamp($r[2])->inTesto();
+                
+                $n++;
+                $m = new Email('promemoriaCorsi', "Il tuo titolo {$titolo} è in scadenza per il {$dataFine}");
+                $m->a           = $u;
+                $m->_NOME       = $u->nome;
+                $m->_NUMERO     = $r[1];
+                $m->accoda();
+            }
+            return "Inviati {$n} promemoria";
+        },
+        $log, $ok
+    );
+        
     
     return $ok;
 

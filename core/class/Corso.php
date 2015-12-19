@@ -1436,5 +1436,9 @@ die('asd');
         
         return $contatore;
     }
+
+    public static function bloccaCorsi() {
+       // da imp 
+    }
     
 }
