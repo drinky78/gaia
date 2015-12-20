@@ -2391,8 +2391,9 @@ class Utente extends Persona {
         $r = [];
         $lista = TitoloCorso::filtra([['volontario',  $this->id]], "fine DESC");
         foreach ($lista as $titolo) {
-            if (!in_array($titolo->titolo, $r)){
-                $r[$titolo->titolo] = $titolo;
+            $key = $titolo->ruolo.'-'.$titolo->qualifica;
+            if (!isset($r[$key])) {
+                $r[$key] = $titolo;
             }
         }
         return $r;

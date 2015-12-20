@@ -57,6 +57,17 @@ $titoli = TitoloCorso::filtra([
                 </div>
                 <div class="row-fluid">
                     <div class="span4">
+                        <label for="titolo"><i class="icon-certificate"></i> Eventuali affiancamenti</label>
+                    </div>
+                    <div class="span8">
+                        <select name="affiancamenti">
+                            <option value="0">NON ANCORA COMPLETATI</option>
+                            <option value="1">SUPERATI CON SUCCESSO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span4">
                         <label for="dataInizio"><i class="icon-calendar"></i> Data del titolo</label>
                     </div>
                     <div class="span8">
@@ -93,9 +104,11 @@ $titoli = TitoloCorso::filtra([
                 foreach ( $titoli as $titolo ) { 
                     $corso = $titolo->corso();
                     $organizzatore = empty($corso) ? 'N/A' : $corso->organizzatore()->nome;
+                  
+                    $nomeTitolo =  (!$titolo->ruolo || !$titolo->qualifica) ? "Titolo con dati non corretti" : $titolo->qualifica()->nome.' '.$titolo->ruolo()->ruolo;
                     ?>
                     <tr>
-                        <td><strong><?php echo $titolo->titolo()->nome; ?></strong></td>
+                        <td><strong><?php echo $nomeTitolo ?></strong></td>
                         <td><strong><?php echo $organizzatore ?></strong></td>
                         <td><small>
                             <?php if ( $titolo->inizio ) { ?>

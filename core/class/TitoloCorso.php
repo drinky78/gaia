@@ -35,6 +35,14 @@ class TitoloCorso extends Entita {
         return TipoCorso::id($this->titolo);
     }
     
+    public function ruolo() {
+        return RuoloFormazione::id($this->ruolo);
+    }
+    
+    public function qualifica() {
+        return Qualifiche::id($this->qualifica);
+    }
+    
     public function cancella() {
         parent::cancella();
     }

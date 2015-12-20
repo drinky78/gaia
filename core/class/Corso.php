@@ -1313,7 +1313,8 @@ var_dump($tipoCorsoIstruttore); # null
                 
                 $titoloCorsoIstruttore = TitoloCorso::filtra([
                     ['volontario', $volontario->id],
-                    ['titolo', $tipoCorsoIstruttore->id]
+                    ['ruolo', $tipoCorsoIstruttore->ruoloAttestato],
+                    ['qualifica', $tipoCorsoIstruttore->qualifica]
                 ]);
                 
                 if (empty($titoloCorsoIstruttore)) {
@@ -1366,8 +1367,6 @@ var_dump($titoloCorsoIstruttore); # null
                 if ($affiancamentiPositivi >= ($affiancamentiPrevisti-1)) {
                     //GOAL
                     
-                    $nuovoRuolo = $tipoCorsoIstruttore->ruoloAttestatoPostAffiancamenti;
-
                     $risultato->generaSeriale(intval(date("Y", $risultato->timestamp)), $this->tipo);
                     $risultato = RisultatoCorso::id($risultato->id);
 
@@ -1383,7 +1382,8 @@ var_dump($titoloCorsoIstruttore); # null
                     $titoloCorso->volontario = $volontario->id;
                     $titoloCorso->inizio = $risultato->timestamp;
                     $titoloCorso->fine = intval($titoloCorso->inizio) + (60 * 60 * 24 * 365);
-                    $titoloCorso->titolo = $tipoCorsoIstruttore;
+                    $titoloCorso->ruolo = $tipoCorsoIstruttore->ruoloAttestatoPostAffiancamenti;
+                    $titoloCorso->qualifica = $tipoCorsoIstruttore->qualifica;
                     $titoloCorso->codice = $risultato->seriale; 
 
                 }
@@ -1403,12 +1403,15 @@ var_dump($titoloCorsoIstruttore); # null
 
                 $this->inviaAttestato($risultato, $volontario, $f);
                 
+                $tipoCorso = TipoCorso::id($this->tipo);
+                
                 // Aggiunto il titolo al discente che ha superato il corso
                 $titoloCorso = new TitoloCorso();
                 $titoloCorso->volontario = $volontario->id;
                 $titoloCorso->inizio = $risultato->timestamp;
                 $titoloCorso->fine = intval($titoloCorso->inizio) + (60 * 60 * 24 * 365);
-                $titoloCorso->titolo = $this->tipo;
+                $titoloCorso->qualifica = $tipoCorso->qualifica;
+                $titoloCorso->ruolo = $tipoCorso->ruoloAttestato;
                 $titoloCorso->codice = $risultato->seriale; 
             }
             
