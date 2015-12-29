@@ -790,17 +790,17 @@ class Corso extends GeoEntita {
         
         $tipo = TipoCorso::id($this->tipo);
        
-        $m = new Email('crs/invioAttestato', "Invio Certificato" );
+        $m = new Email('crs/superatoCorso', "Invio Certificato" );
         //$m->a = $aut->partecipazione()->volontario();
         //$m->da = "pizar79@gmail.com";
         $m->a = $iscritto;
         $m->_COMITATO     = maiuscolo($comitato);
         $m->_CF           = $iscritto->codiceFiscale;
-        $m->_CORSO        = $tipo->nome;
+        $m->_CORSO        = "Corso ".$tipo->nome;
         $m->_SERIALE      = $risultato->seriale;
         $m->_VOLONTARIO   = $iscritto->nomeCompleto();
         $m->_DATAESAME    = date('d/m/Y', $this->tEsame);
-        $m->_DATA         = date('d/m/Y', time());
+        $m->_DATA         = $this->inizio()->format('d/m/Y');
         $m->_LUOGO        = $this->organizzatore()->comune;
         $m->_VOLON        = $sesso;
         $m->allega($f, true);
@@ -1286,15 +1286,15 @@ class Corso extends GeoEntita {
         foreach($risultati as $risultato){
             $volontario = $risultato->volontario();
             
-var_dump($risultato);
+//var_dump($risultato);
             // affiancamenti == -1 è una convenzione per determinare che il risultato 
             // è relativo ad un affiancamento (vedi formazione.corsi.risultati.ok.php)
             if ($risultato->affiancamenti == -1) {
                 // recupera qualifica e ruolo per un docente in affiancamento
                 $qualifica = $this->tipo()->qualifica;
-var_dump($qualifica); #1
+//var_dump($qualifica); #1
                 $ruoloAffiancamento = $this->tipo()->ruoloAffiancamento;
-var_dump($ruoloAffiancamento);
+//var_dump($ruoloAffiancamento);
                 // è necessario cercare l'ultimo corso in cui il docente in affiancamento 
                 // ha conseguito il titolo di "docente in affiancamento",
                 // pertanto si cerca prima il tipo di corso e poi i titoli conseguiti per quel tipo di corso
@@ -1309,7 +1309,7 @@ var_dump($ruoloAffiancamento);
                 }
                 
                 $tipoCorsoIstruttore = $tipoCorsoIstruttore[0];
-var_dump($tipoCorsoIstruttore); # null
+//var_dump($tipoCorsoIstruttore); # null
                 
                 $titoloCorsoIstruttore = TitoloCorso::filtra([
                     ['volontario', $volontario->id],
@@ -1322,7 +1322,7 @@ var_dump($tipoCorsoIstruttore); # null
                     break;
                 }
                 
-var_dump($titoloCorsoIstruttore); # null
+//var_dump($titoloCorsoIstruttore); # null
 
                 // ricerca del risultato del corso istruttori con il quale ha conseguito il titolo di potenziale istruttore/formatore
                 $risultatoCorsoIstruttore = RisultatoCorso::filtra([
@@ -1416,7 +1416,6 @@ var_dump($titoloCorsoIstruttore); # null
             }
             
         }
-die('asd');
         // Verbale, generazione e invio
         $f = $this->generaVerbale($risultati);
         $this->verbale = $f->id;

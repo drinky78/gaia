@@ -17,35 +17,12 @@ $noteDisc = filter_input(INPUT_POST, 'discNote', FILTER_DEFAULT, FILTER_REQUIRE_
 $affiancamentiDisc = filter_input(INPUT_POST, 'discAffiancamenti', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 $segnalazioniDisc = filter_input(INPUT_POST, 'discSegnalazioni', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-
-
-//(var_dump($idoneitaAff));
-//(var_dump($affiancamenti));
-//(var_dump($segnalazioni));
 $c = null;
 try {
     $c = Corso::id(intval($_POST['id']));
     
-    
-    
-    
-    
-    
-    
-    
-    
-//    
 //    $c->chiudi();
 //    die;
-//    
-    
-    
-    
-    
-    
-    
-    
-    
     
     // controllare che l'utente attuale sia il direttore del corso 
 
