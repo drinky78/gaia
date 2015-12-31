@@ -127,7 +127,7 @@ $d = new DateTime('@' . $c->inizio);
                         </div>
                         <div class="span3">
                             <label>Prova scritta</label>
-                            <select name="discScritto[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                            <select name="discScritto[<?php echo $d->volontario()->id ?>]" class="input-block-level">
                                 <option value="">Non necessaria</option>
                                 <option value="100">100</option>
                                 <option value="90">90</option>
@@ -144,7 +144,7 @@ $d = new DateTime('@' . $c->inizio);
                         </div>
                         <div class="span3">
                             <label>Prova pratica</label>
-                            <select name="discPratica[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                            <select name="discPratica[<?php echo $d->volontario()->id ?>]" class="input-block-level">
                                 <option value="">Non necessaria</option>
                                 <option value="100">100</option>
                                 <option value="90">90</option>
@@ -161,7 +161,7 @@ $d = new DateTime('@' . $c->inizio);
                         </div>
                         <div class="span3">
                             <label>Utilizzo presidio</label>
-                            <select name="discPresidio[<?php echo $d->volontario()->id ?>]" class="input-block-level" required="true">
+                            <select name="discPresidio[<?php echo $d->volontario()->id ?>]" class="input-block-level">
                                 <option value="">Non necessaria</option>
                                 <option value="100">100</option>
                                 <option value="90">90</option>

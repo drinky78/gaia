@@ -1401,7 +1401,6 @@ class Corso extends GeoEntita {
                 $risultato->file = $f->id;
                 $risultato->generato = 1;
 
-                $this->inviaAttestato($risultato, $volontario, $f);
                 
                 $tipoCorso = TipoCorso::id($this->tipo);
                 
@@ -1413,13 +1412,20 @@ class Corso extends GeoEntita {
                 $titoloCorso->qualifica = $tipoCorso->qualifica;
                 $titoloCorso->ruolo = $tipoCorso->ruoloAttestato;
                 $titoloCorso->codice = $risultato->seriale; 
+                
+                try {
+                    $this->inviaAttestato($risultato, $volontario, $f);
+                } catch (Exception $e) {}
             }
             
         }
+        
+        /* IMPORTANTE: DA RIPRISTINARE *
         // Verbale, generazione e invio
         $f = $this->generaVerbale($risultati);
         $this->verbale = $f->id;
         $this->inviaVerbale($f);
+        */
         
         $this->stato = CORSO_S_CHIUSO;
         
